@@ -1,0 +1,122 @@
+{
+    "lightSpeedInLeft": {
+        "animation": {
+            "filter": [
+                "opacity(0)",
+                "opacity(1)"
+            ],
+            "transform": [
+                "translate3d(-100%, 0, 0) skewX(30deg)",
+                "skewX(-20deg)",
+                "skewX(5deg)",
+                "translate3d(0, 0, 0)"
+            ],
+            "offset": [
+                0,
+                0.6,
+                0.8,
+                1
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    },
+    "lightSpeedInRight": {
+        "animation": {
+            "filter": [
+                "opacity(0)",
+                "opacity(1)"
+            ],
+            "transform": [
+                "translate3d(100%, 0, 0) skewX(-30deg)",
+                "skewX(20deg)",
+                "skewX(-5deg)",
+                "translate3d(0, 0, 0)"
+            ],
+            "offset": [
+                0,
+                0.6,
+                0.8,
+                1
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    },
+    "lightSpeedOutLeft ": {
+        "animation": {
+            "filter": [
+                "opacity(1)",
+                "opacity(0)"
+            ],
+            "transform": [
+                "",
+                "translate3d(-100%, 0, 0) skewX(-30deg)"
+            ],
+            "offset": [
+                0,
+                1
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    },
+    "lightSpeedOutRight": {
+        "animation": {
+            "filter": [
+                "opacity(1)",
+                "opacity(0)"
+            ],
+            "transform": [
+                "",
+                "translate3d(100%, 0, 0) skewX(30deg)"
+            ],
+            "offset": [
+                0,
+                1
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    },
+    "fadeIn": {
+        "animation": {
+            "filter": [
+                "brightness(0)",
+                "brightness(1)"
+            ]
+        },
+        "config": {}
+    },
+    "fadeOut": {
+        "animation": {
+            "filter": [
+                "brightness(1)",
+                "brightness(0)"
+            ]
+        },
+        "config": {}
+    },
+    "blurIn": {
+        "animation": {
+            "filter": [
+                "blur(50px)",
+                "blur(0px)"
+            ]
+        },
+        "config": {}
+    },
+    "blurOut": {
+        "animation": {
+            "filter": [
+                "blur(0px)",
+                "blur(50px)"
+            ]
+        },
+        "config": {}
+    }
+}

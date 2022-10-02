@@ -1,0 +1,38 @@
+{
+    "shakeX": {
+        "animation": {
+            "transform": [
+                "translate3d(-1px, 0, 0)",
+                "translate3d(2px, 0, 0)",
+                "translate3d(-4px, 0, 0)",
+                "translate3d(4px, 0, 0)",
+                "translate3d(-4px, 0, 0)",
+                "translate3d(4px, 0, 0)",
+                "translate3d(-4px, 0, 0)",
+                "translate3d(2px, 0, 0)",
+                "translate3d(-1px, 0, 0)"
+            ]
+        },
+        "config": {
+            "easing": "cubic-bezier(.36,.07,.19,.97)"
+        }
+    },
+    "shakeY": {
+        "animation": {
+            "transform": [
+                "translate3d(0, -1px, 0)",
+                "translate3d(0, 2px, 0)",
+                "translate3d(0, -4px, 0)",
+                "translate3d(0, 4px, 0)",
+                "translate3d(0, -4px, 0)",
+                "translate3d(0, 4px, 0)",
+                "translate3d(0, -4px, 0)",
+                "translate3d(0, 2px, 0)",
+                "translate3d(0, -1px, 0)"
+            ]
+        },
+        "config": {
+            "easing": "cubic-bezier(.36,.07,.19,.97)"
+        }
+    }
+}

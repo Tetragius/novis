@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.png">
+</head>
+<script src="/index.js" type="module" deffer></script>
+
+<body style="user-select: none; margin: 0; background: black;">
+    <g-game w="1024" h="768" color="black">
+        <div id="g-entry"></div>
+        <!--SYSTEM-->
+        <g-filter backdrop name="sepia" value="100">
+            <g-filter backdrop name="blur" value="10">
+                <g-layer
+                    conditional="!$gameData.global.isStarted || $gameData.global.isShowMenu ||$gameData.global.isShowSettings ||$gameData.global.isPaused">
+                    <g-dialog-menu conditional="$gameData.global.isShowMenu" x="50" y="50">
+                        <g-group>
+                            <g-button conditional="!$gameData.global.isStarted"
+                                onclick="$CommandManager.runCommand('$cmd:start-game$')">
+                                Новая игра
+                            </g-button>
+                            <g-button onclick="$CommandManager.runCommand('$cmd:set-global-data:isShowSettings:true$')">
+                                Настройки
+                            </g-button>
+                            <g-button conditional="$gameData.global.isStarted"
+                                onclick="$CommandManager.runCommand('$cmd:end-game$')">Выход</g-button>
+                        </g-group>
+                    </g-dialog-menu>
+                    <g-dialog-menu conditional="$gameData.global.isPaused">
+                        <g-group align="center">
+                            <span>ПАУЗА</span>
+                        </g-group>
+                    </g-dialog-menu>
+                    <g-dialog-system conditional="$gameData.global.isShowSettings">
+                        <span style="display: flex; align-items: center;">Громкость: <g-range min="0" max="1"
+                                step="0.01" $value="$SFXManager.volume"
+                                onchange="$SFXManager.setVolume(event.target.value)"></g-range></span>
+                        <g-button onclick="$SFXManager.play()">Включить</g-button>
+                    </g-dialog-system>
+                </g-layer>
+            </g-filter>
+        </g-filter>
+        <!--SYSTEM-->
+    </g-game>
+</body>
+
+</html>

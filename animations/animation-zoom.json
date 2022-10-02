@@ -1,0 +1,40 @@
+{
+    "zoomIn": {
+        "animation": {
+            "opacity": [
+                "0",
+                "1"
+            ],
+            "transform": [
+                "scale3d(0.3, 0.3, 0.3)",
+                ""
+            ],
+            "offset": [
+                0,
+                0.5
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    },
+    "zoomOut": {
+        "animation": {
+            "opacity": [
+                "1",
+                "0"
+            ],
+            "transform": [
+                "",
+                "scale3d(0.3, 0.3, 0.3)"
+            ],
+            "offset": [
+                0,
+                0.5
+            ]
+        },
+        "config": {
+            "composite": "add"
+        }
+    }
+}

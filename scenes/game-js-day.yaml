@@ -1,0 +1,163 @@
+---
+game-js-day:
+  # Настройки
+  # Элементы
+  template:
+    name: g-scene
+    attrs:
+      id: game-js-day
+      conditional: false
+    children:
+    - name: g-layer
+      children:
+      - name: g-image
+        attrs:
+          src: /img/js-day.jpg
+          w: 1024px
+          h: 768px
+    # Cлой с Наташей
+    - name: g-layer
+      attrs:
+        id: nata
+        conditional: $cmd:get-scene-data:this:isShowNata$
+      children:
+      - name: g-image
+        attrs:
+          src: /img/fm01/fm01-body.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+      - name: g-image
+        attrs:
+          src: /img/fm01/fm01-eyes-soft.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+      - name: g-image
+        attrs:
+          src: /img/fm01/fm01-mouth-soft01.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+    # Слой с мини-игрой
+    - name: g-layer
+      children:
+      - name: g-animate
+        attrs:
+          conditional: $cmd:get-scene-data:this:isStartClickGame$
+          name: rotate
+        children:
+        - name: g-image
+          attrs:
+            onclick: $CommandManager.runCommand('$cmd:increment-scene-data:this:count:1$')
+            src: /img/target1.png
+            w: 150px
+            h: 150px
+            x: 526px
+            y: 215px
+    # Cлой с элементами управления
+    - name: g-layer
+      children:
+      - name: g-dialog
+        attrs:
+          id: dialog
+          conditional: $cmd:get-scene-data:this:isShowDialog$
+      - name: g-dialog-menu
+        attrs:
+          id: select
+          conditional: $cmd:get-scene-data:this:isShowSelect$
+        children:
+        - name: g-group
+          children:
+          - name: g-button
+            attrs:
+              onclick: $CommandManager.runCommand('$cmd:run-script:to-hall$')
+            children: Выйти в холл
+          - name: g-button
+            attrs:
+              onclick: $CommandManager.runCommand('$cmd:run-script:mini-game$')
+            children: Мини-игра
+    - name: g-title
+      attrs:
+        id: title
+        conditional: $cmd:get-scene-data:this:isShowTitle$
+      children:
+      - Комната Наташи
+  # Данные
+  data:
+    isShowDialog: false
+    isShowSelect: false
+    isShowNata: false
+    isFirstTime: true
+    isShowTitle: false
+    isStartClickGame: false
+    count: 0
+  # Скрипты
+  scripts:
+    onIn:
+    - conditional: 'true'
+      steps:      
+      - - $cmd:fadeIn:1$
+        - - - $cmd:sfx-background:/sfx/Sunset.mp3$
+          - - $cmd:sfx-in$
+
+        - $cmd:set-scene-data:this:isShowTitle:true$
+        - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
+        - $cmd:wait:1$
+        - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
+        - $cmd:set-scene-data:this:isShowTitle:false$
+
+        - $cmd:wait:1$
+        - $cmd:set-scene-data:this:isShowNata:true$
+        - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
+    - conditional: $cmd:get-scene-data:this:isFirstTime$
+      steps:
+      - - $cmd:set-scene-data:this:isShowNata:true$
+        - $cmd:set-scene-data:this:isShowDialog:true$
+        - $cmd:set-scene-data:this:isShowSelect:true$
+    onOut:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-scene-data:this:isShowDialog:false$
+        - $cmd:set-scene-data:this:isShowSelect:false$
+        - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
+        - $cmd:set-scene-data:this:isShowNata:false$
+        # - $cmd:set-scene-data:this:isFirstTime:false$
+        - $cmd:sfx-out$
+        - $cmd:fadeOut:1$
+    to-hall:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-scene-data:this:isShowSelect:false$
+        - $cmd:set-scene-data:this:isShowDialog:false$
+        - $cmd:wait:1$
+        - $cmd:set-scene:game-start$
+    mini-game:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-scene-data:this:isShowSelect:false$
+
+        - $cmd:set-dialog-message:dialog:Ткни три раза по мишени!$
+        - $cmd:wait:2$
+
+        - $cmd:set-scene-data:this:isShowDialog:false$        
+
+        - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
+        - $cmd:set-scene-data:this:isShowNata:false$
+        
+        - $cmd:set-scene-data:this:isStartClickGame:true$
+
+        - conditional: "$cmd:get-scene-data:this:count$ === 3"
+          parallel: true
+          loop: Infinity
+          steps:          
+          - - $cmd:set-scene-data:this:isStartClickGame:false$
+            - $cmd:set-scene-data:this:isShowNata:true$
+            - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
+            - $cmd:set-scene-data:this:isShowDialog:true$ 
+            - $cmd:set-dialog-message:dialog:Отлично!$
+            - $cmd:wait:1$
+            - $cmd:set-scene-data:this:isShowSelect:true$        
+            - $cmd:set-scene-data:this:count:0$
+            - $cmd:kill-this-script$
+

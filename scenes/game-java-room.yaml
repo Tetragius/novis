@@ -1,0 +1,111 @@
+---
+game-java-room:
+  # Настройки
+  # Элементы
+  template:
+    name: g-scene
+    attrs:
+      id: game-java-room
+      conditional: false
+    children:
+    - name: g-layer
+      children:
+      - name: g-image
+        attrs:
+          src: /img/java-room.jpg
+          w: 1024px
+          h: 768px
+    # Cлой с Димой
+    - name: g-layer
+      attrs:
+        id: dima
+        conditional: $cmd:get-scene-data:this:isShowDima$
+      children:
+      - name: g-image
+        attrs:
+          src: /img/m01/m01-body.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+      - name: g-image
+        attrs:
+          src: /img/m01/m01-eyes-smile.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+      - name: g-image
+        attrs:
+          src: /img/m01/m01-mouth-smile00.png
+          y: 48px
+          w: 400px
+          aspect-ratio: 1200/2160
+    # Cлой с элементами управления
+    - name: g-layer
+      children:
+      - name: g-dialog
+        attrs:
+          id: dialog
+          conditional: $cmd:get-scene-data:this:isShowDialog$
+      - name: g-dialog-menu
+        attrs:
+          id: select
+          conditional: $cmd:get-scene-data:this:isShowSelect$
+        children:
+        - name: g-group
+          children:
+          - name: g-button
+            attrs:
+              onclick: $CommandManager.runCommand('$cmd:run-script:to-hall$')
+            children: Лучше уйти, он странный
+    - name: g-title
+      attrs:
+        id: title
+        conditional: $cmd:get-scene-data:this:isShowTitle$
+      children:
+      - Комната Димы
+  # Данные
+  data:
+    isShowDialog: false
+    isShowSelect: false
+    isShowDima: false
+    isShowTitle: false
+  # Скрипты
+  scripts:
+    onIn:
+    - conditional: 'true'
+      steps:
+      - - $cmd:fadeIn:1$
+        - - - $cmd:sfx-background:/sfx/alexander-nakarada-silly-intro.mp3$
+          - - $cmd:sfx-in$
+
+        - $cmd:set-scene-data:this:isShowTitle:true$
+        - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
+        - $cmd:wait:1$
+        - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
+        - $cmd:set-scene-data:this:isShowTitle:false$
+
+        - $cmd:wait:1$
+        - $cmd:set-scene-data:this:isShowDima:true$
+        - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
+        - $cmd:set-scene-data:this:isShowDialog:true$
+        - $cmd:set-dialog-message:dialog:JAAAAAAVAAAAAAAA!$
+        - $cmd:wait:3$
+        - $cmd:set-dialog-message:dialog:Java? Java, java jaaava ja va! Ja va? Java!?$
+        - $cmd:wait:3$
+        - $cmd:set-scene-data:this:isShowSelect:true$
+    onOut:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-scene-data:this:isShowDialog:false$
+        - $cmd:set-scene-data:this:isShowSelect:false$
+        - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
+        - $cmd:set-scene-data:this:isShowDima:false$
+        - $cmd:sfx-out$
+        - $cmd:fadeOut:1$
+    to-hall:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-scene-data:this:isShowSelect:false$
+        - $cmd:set-scene-data:this:isShowDialog:false$
+        - $cmd:wait:1$
+        - $cmd:set-scene:game-start$
