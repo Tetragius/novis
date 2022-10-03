@@ -148,25 +148,6 @@ game-start:
         conditional: $cmd:get-scene-data:this:isShowTitle$
       children:
       - Холл
-  # Диалоги
-  dialogs:
-    dialog-1:
-      - title: title
-        conditional: true
-        message: message
-        wait: 1
-        commands:
-        - $cmd:eval:console.log(1)$
-        - $cmd:set-scene-data:this:isShowNata:true$
-      - conditional: true
-        message: message
-        wait: 1
-        commands:
-        - $cmd:eval:console.log(2)$
-      - buttons:
-          - conditional: true
-            text: text
-            action: $cmd:wait:2$
   # Данные
   data:
     isShowDialogTitled: false

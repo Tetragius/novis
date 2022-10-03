@@ -1,5 +1,6 @@
 import { DataManager } from './dataManager.js';
 import { CommandManager } from './commandManager.js'
+import { PluginManager } from './pluginManager.js'
 import { AnimationManager } from './animationManager.js'
 import { SceneManager } from './sceneManager.js';
 
@@ -9,16 +10,32 @@ export class Manager extends EventTarget {
     }
 
     init() {
-        window.addEventListener('keydown', this.clickHandler.bind(this));
+        window.addEventListener('keydown', this.keyDownHandler.bind(this));
+        window.addEventListener('keyup', this.keyUpHandler.bind(this));
         this.addEventListener('changescene', async ({ detail }) => await SceneManager.changeScene(detail));
         this.addEventListener('startnewgame', this.startNewGame.bind(this));
         this.addEventListener('endgame', this.initialScene.bind(this));
         this.initialScene();
     }
 
-    clickHandler(e) {
+    keyUpHandler(e) {
         if (DataManager.global.isStarted) {
             switch (e.key.toUpperCase()) {
+                case 'CONTROL':
+                    DataManager.setGlobalData('isSkipMode', false);
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
+
+    keyDownHandler(e) {
+        if (DataManager.global.isStarted) {
+            switch (e.key.toUpperCase()) {
+                case 'CONTROL':
+                    DataManager.setGlobalData('isSkipMode', true);
+                    return;
                 case 'ESCAPE':
                     DataManager.setGlobalData('isShowMenu', !DataManager.global.isShowMenu);
                     return;
@@ -29,6 +46,15 @@ export class Manager extends EventTarget {
                 case 'P':
                 case 'З':
                     DataManager.setGlobalData('isPaused', !DataManager.global.isPaused);
+                    return;
+                default:
+                    return;
+            }
+        }
+        else {
+            switch (e.key.toUpperCase()) {
+                case 'ESCAPE':
+                    DataManager.setGlobalData('isShowSettings', false);
                     return;
                 default:
                     return;
@@ -49,13 +75,16 @@ export class Manager extends EventTarget {
         DataManager.setGlobalData('isShowMenu', true);
     }
 
-    async load(gameDataSrc, animationsSrc, commandsSrc) {
+    async load(gameDataSrc, animationsSrc, commandsSrc, pluginsSrc) {
         await DataManager.loadData(gameDataSrc);
         for (const animationSrc of animationsSrc) {
             await AnimationManager.defineAnimations(animationSrc);
         }
         for (const commandSrc of commandsSrc) {
             await CommandManager.defineCommands(commandSrc);
+        }
+        for (const pluginSrc of pluginsSrc) {
+            await PluginManager.definePlugin(pluginSrc);
         }
     }
 }

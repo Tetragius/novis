@@ -9,14 +9,14 @@ export const commands = {
         resolver('increment-data');
     },
     'increment-scene-data': (sceneName, path, value, resolver) => {
-        if (sceneName === 'this') sceneName = SceneManager.currentSceneName?.replace('scene-', '');
+        if (sceneName === 'this') sceneName = SceneManager.currentSceneName;
         const func = new Function(`return this.${path}`);
         const data = func.call(DataManager.scenesData[sceneName]?.data);
         DataManager.setSceneData(sceneName, path, Number(data) + Number(value));
         resolver('increment-scene-data');
     },
     'decriment-scene-data': (sceneName, path, value, resolver) => {
-        if (sceneName === 'this') sceneName = SceneManager.currentSceneName?.replace('scene-', '');
+        if (sceneName === 'this') sceneName = SceneManager.currentSceneName;
         const func = new Function(`return this.${path}`);
         const data = func.call(DataManager.scenesData[sceneName]?.data);
         DataManager.setSceneData(sceneName, path, Number(data) - Number(value));
@@ -33,7 +33,7 @@ export const commands = {
         resolver('set-data');
     },
     'set-scene-data': (sceneName, path, value, resolver) => {
-        if (sceneName === 'this') sceneName = SceneManager.currentSceneName?.replace('scene-', '');
+        if (sceneName === 'this') sceneName = SceneManager.currentSceneName;
         DataManager.setSceneData(sceneName, path, value);
         resolver('set-scene-data');
     },
@@ -42,9 +42,14 @@ export const commands = {
         resolver('set-global-data');
     },
     'get-scene-data': (sceneName, path, resolver) => {
-        if (sceneName === 'this') sceneName = SceneManager.currentSceneName?.replace('scene-', '');
+        if (sceneName === 'this') sceneName = SceneManager.currentSceneName;
         const func = new Function(`return this.${path}`);
         const data = func.call(DataManager.scenesData[sceneName]?.data);
+        resolver(data);
+    },
+    'get-gloabl-data': (path, resolver) => {
+        const func = new Function(`return this.${path}`);
+        const data = func.call(DataManager.global);
         resolver(data);
     },
 }

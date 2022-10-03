@@ -1,7 +1,6 @@
 import { GameManager } from "../services/gameManager.js";
 import { CommandManager } from "../services/commandManager.js";
 import { SceneManager } from '../services/sceneManager.js';
-import { DialogManager } from '../services/dialogManager.js';
 
 export const commands = {
     // game
@@ -56,9 +55,5 @@ export const commands = {
             element.setAttribute(pair[0], pair[1]);
         });
         resolver('show-scene-title');
-    },
-    'play-dialog': async (id, resolver) => {
-        await DialogManager.play(id);
-        resolver('play-dialog');
     },
 }

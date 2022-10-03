@@ -1,13 +1,18 @@
 import './services/sceneManager.js';
 import './services/dataManager.js';
-import './services/dialogManager.js';
 import './services/animationManager.js';
 import './services/commandManager.js';
 import './services/sfxManager.js';
+import './services/pluginManager.js';
 import { GameManager } from './services/gameManager.js';
 
 document.body.addEventListener('contextmenu', (e) => {
     e.preventDefault();
+});
+
+document.body.addEventListener('keydown', (e) => {
+    if (e.key === 'F12')
+        e.preventDefault();
 });
 
 GameManager.load(
@@ -25,6 +30,9 @@ GameManager.load(
         '/commands/commands-animation.js',
         '/commands/commands-data.js',
         '/commands/commands-sound.js',
+    ],
+    [
+        '/plugins/plugin-inventory.js'
     ]
 )
     .then(

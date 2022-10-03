@@ -2,14 +2,21 @@ import { DataManager } from "./dataManager.js";
 
 const AsyncFunction = (async function () { }).constructor;
 
-export class Interpretator {
-    constructor() { }
+export class Interpretator extends EventTarget {
+    constructor() {
+        super();
+    }
 
     commands = {};
 
     async defineCommands(src) {
         const module = await import(src);
         this.commands = { ...this.commands, ...module.commands };
+        return true;
+    }
+
+    async registrCommands(commands) {
+        this.commands = { ...this.commands, ...commands };
         return true;
     }
 
@@ -47,7 +54,7 @@ export class Interpretator {
     }
 
     async prepareCommand(command) {
-        console.log('prepare command: ', command);
+        // console.log('prepare command: ', command);
         try {
             const regexp = /\(\$cmd:(.*?)(:(.*?))?\$\)/gm;
             const promises = [];
@@ -59,12 +66,12 @@ export class Interpretator {
             return command.replace(regexp, () => results.shift());
         }
         catch (error) {
-            console.log('prepare command: ', error);
+            // console.log('prepare command: ', error);
         }
     }
 
     async runCommand(command, pid) {
-        console.log('run command: ', command, pid);
+        // console.log('run command: ', command, pid);
         command = await this.prepareCommand(command);
         const parse = /\$cmd:(.*?)(:(.*?))?\$/gm.exec(command);
         const cmd = this.commands[parse[1]];
@@ -72,22 +79,23 @@ export class Interpretator {
         return new Promise(resolve => {
             try {
                 cmd(...args, resolve, pid);
+                this.dispatchEvent(new CustomEvent('finishcommand', { detail: { command, args } }));
             }
             catch (error) {
-                console.log('run command error: ', error);
+                // console.log('run command error: ', error);
             }
         });
     }
 
     async evalCommandChain(chain, pid) {
-        console.log('eval command chain: ', chain, pid);
+        // console.log('eval command chain: ', chain, pid);
         if (pid && !this.#process[pid]) return Promise.resolve();
         const step = chain.shift();
         if (step) {
             await this.pause();
             if (typeof step === 'string') {
                 const result = await CommandManager.runCommand(step, pid);
-                console.log('command result: ', result);
+                // console.log('command result: ', result);
             }
             else if (Array.isArray(step)) {
                 await this.evalCommandParallel([...step], pid);
@@ -100,7 +108,7 @@ export class Interpretator {
     }
 
     async evalCommandParallel(chains, pid) {
-        console.log('eval command parallel: ', chains, pid);
+        // console.log('eval command parallel: ', chains, pid);
         return Promise.allSettled(chains.map(chain => this.evalCommandChain([...chain], pid)));
     }
 
@@ -111,7 +119,7 @@ export class Interpretator {
     }
 
     async evalScriptsChain(chain) {
-        console.log('eval scripts chain: ', chain);
+        // console.log('eval scripts chain: ', chain);
         const step = chain.shift();
         if (step) {
             if (await this.checkScriptConditional(step.conditional)) {
@@ -124,11 +132,11 @@ export class Interpretator {
     }
 
     async evalScriptsParallel(chains) {
-        console.log('eval scripts parallel: ', chains);
+        // console.log('eval scripts parallel: ', chains);
         await Promise.allSettled(chains.map(async (chain) => {
             const pid = this.newProcess(chain);
             let count = Number(chain.loop ?? 1);
-            console.log('count: ', count)
+            // console.log('count: ', count)
             while (count && this.#process[pid]) {
                 let resolver;
                 const promise = new Promise(resolve => resolver = resolve);
@@ -146,7 +154,7 @@ export class Interpretator {
     }
 
     async evalScripts(scripts = [], kill = false) {
-        console.log('eval scripts', scripts, kill);
+        // console.log('eval scripts', scripts, kill);
         if (kill) {
             for (let proc in this.#process) {
                 this.killProcess(proc);

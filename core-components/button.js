@@ -9,6 +9,12 @@ export class Button extends GameElement {
         this.addEventListener('click', () => SFXManager.sound('/sfx/click.wav'))
     }
 
+    setPosition(){
+        super.setPosition();
+        this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : '';
+        this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : '';
+    }
+
     _css = `
         :host{
             border: 2px solid gray;

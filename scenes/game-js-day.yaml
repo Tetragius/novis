@@ -77,6 +77,11 @@ game-js-day:
             attrs:
               onclick: $CommandManager.runCommand('$cmd:run-script:mini-game$')
             children: Мини-игра
+          - name: g-button
+            attrs:
+              conditional: "$cmd:pg-inventory-has-item:1$"
+              onclick: $CommandManager.runCommand('$cmd:pg-inventory-remove-item:1$')
+            children: Отдать изоленту
     - name: g-title
       attrs:
         id: title

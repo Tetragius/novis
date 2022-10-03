@@ -77,6 +77,11 @@ game-js-night:
             attrs:
               onclick: $CommandManager.runCommand('$cmd:run-script:start-search$')
             children: Осмотреть комнату
+          - name: g-button
+            attrs:
+              conditional: "!$cmd:pg-inventory-has-item:1$"
+              onclick: $CommandManager.runCommand('$cmd:pg-inventory-set-item:1$')
+            children: Получить изоленту
     - name: g-title
       attrs:
         id: title

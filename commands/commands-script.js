@@ -1,4 +1,5 @@
 import { CommandManager } from "../services/commandManager.js";
+import { DataManager } from "../services/dataManager.js";
 import { SceneManager } from '../services/sceneManager.js';
 
 export const commands = {
@@ -18,5 +19,12 @@ export const commands = {
         eval(code);
         resolver('eval');
     },
-    'wait': (seconds, resolver) => setTimeout(resolver, Number(seconds * 1000), 'wait'),
+    'wait': (seconds, resolver) => {
+        const foo = () => DataManager.global.isSkipMode && resolver('wait');
+        DataManager.addEventListener('change', foo);
+        const timer = setTimeout(() => {
+            DataManager.removeEventListener('change', foo);
+            resolver('wait');
+        }, Number(seconds * 1000))
+    },
 }

@@ -6,14 +6,18 @@ class Data extends EventTarget {
         super();
     }
 
+    notify() {
+        this.dispatchEvent(new CustomEvent('change'));
+    }
+
     setData(path, value) {
         (new Function('value', `this.${path} = value`)).call(this, JSON.parse(value));
-        this.dispatchEvent(new CustomEvent('change'));
+        this.notify();
     }
 
     setGlobalData(path, value) {
         (new Function('value', `this.global.${path} = value`)).call(this, JSON.parse(value));
-        this.dispatchEvent(new CustomEvent('change'));
+        this.notify();
     }
 
     setSceneData(scene, path, value) {
@@ -22,7 +26,7 @@ class Data extends EventTarget {
         }
         (new Function('value', `this.scenesData['${scene}'].data.${path} = value`))
             .call(this, value);
-        this.dispatchEvent(new CustomEvent('change'));
+        this.notify();
     }
 
     async loadData(url) {
@@ -51,6 +55,7 @@ class Data extends EventTarget {
         isShowDialog: false,
         isShowMenu: false,
         isShowSettings: false,
+        isSkipMode: false,
     }
 
     scenesData = {}
