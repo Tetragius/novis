@@ -55,7 +55,7 @@ game-java-room:
           children:
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-hall$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-hall$')
             children: Лучше уйти, он странный
     - name: g-title
       attrs:

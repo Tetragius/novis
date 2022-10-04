@@ -69,7 +69,7 @@ export class GameElement extends HTMLElement {
     checkConditional = async () => {
         const conditional = this.getAttribute('conditional');
         if (!conditional) return;
-        const result = await CommandManager.checkScriptConditional(conditional);
+        const result = await CommandManager.execCommandString(conditional);
         if (!result && !this.placeholder) {
             this.placeholder = new Comment(this.id);
             this.placeholder.$element = this;

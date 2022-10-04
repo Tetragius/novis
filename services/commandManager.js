@@ -1,5 +1,13 @@
 import { DataManager } from "./dataManager.js";
 
+// script interface
+// conditional: boolean or command string
+// loop?: number or condtitional as command string
+// parallel?: boolean
+// awaitConditional?: boolean
+// poolId?: string
+// steps: Array of string or subArrays or scripts
+
 const AsyncFunction = (async function () { }).constructor;
 
 export class Interpretator extends EventTarget {
@@ -21,6 +29,13 @@ export class Interpretator extends EventTarget {
     }
 
     #process = {};
+    get process() { return this.#process }
+    log() {
+        setInterval(() => {
+            console.clear();
+            console.table(this.#process);
+        }, 500);
+    }
 
     newProcess(chain) {
         const id = chain.name ?? String(Math.random()).split('.')[1];
@@ -40,8 +55,7 @@ export class Interpretator extends EventTarget {
         return new Promise(resolve => {
             if (!DataManager.global.isPaused) {
                 resolve();
-            }
-            else {
+            } else {
                 const func = () => {
                     if (!DataManager.global.isPaused) {
                         resolve();
@@ -59,15 +73,21 @@ export class Interpretator extends EventTarget {
             const regexp = /\(\$cmd:(.*?)(:(.*?))?\$\)/gm;
             const promises = [];
             command.replace(regexp, (match) => {
-                promises.push(this.checkScriptConditional(match));
+                promises.push(this.execCommandString(match));
                 return match;
             });
             const results = await Promise.all(promises);
             return command.replace(regexp, () => results.shift());
         }
         catch (error) {
-            // console.log('prepare command: ', error);
+            console.log('prepare command: ', error);
         }
+    }
+
+    async execCommandString(cmdString) {
+        const code = cmdString.replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1"))');
+        const result = new AsyncFunction(`return ${code}`).call(this);
+        return result;
     }
 
     async runCommand(command, pid) {
@@ -78,13 +98,65 @@ export class Interpretator extends EventTarget {
         const args = parse[3] ? parse[3].split(':') : [];
         return new Promise(resolve => {
             try {
+                this.dispatchEvent(new CustomEvent('runcommand', { detail: { command, args } }));
                 cmd(...args, resolve, pid);
                 this.dispatchEvent(new CustomEvent('finishcommand', { detail: { command, args } }));
             }
             catch (error) {
-                // console.log('run command error: ', error);
+                console.log('run command error: ', error);
             }
         });
+    }
+
+    async checkConditional(conditional) {
+        const result = await this.execCommandString(conditional);
+        return result;
+    }
+
+    async resolveScriptConditional(script) {
+        if (await this.execCommandString(script.conditional)) {
+            return true;
+        }
+        if (script.awaitConditional) {
+            const result = await new Promise(resolve => {
+                const foo = async () => {
+                    if (await this.execCommandString(script.conditional)) {
+                        DataManager.removeEventListener('change', foo);
+                        resolve(true);
+                    }
+                }
+                DataManager.addEventListener('change', foo);
+            });
+            return result;
+        }
+        return false;
+    }
+
+    async loop(script) {
+        // console.log('loop: ', script)
+        let count = Number(script.loop ?? 1);
+        const loopAsConditional = Boolean(script.loop && isNaN(count));
+
+        if (loopAsConditional) {
+            count = await this.checkConditional(script.loop) ? Infinity : 1;
+        }
+
+        const pid = this.newProcess(script);
+        while (count && this.#process[pid]) {
+            let resolver;
+            const promise = new Promise(resolve => resolver = resolve);
+            setTimeout(async () => {
+                if (await this.resolveScriptConditional(script)) {
+                    await this.evalCommandParallel([...script.steps], pid);
+                }
+                resolver();
+            });
+
+            await promise;
+
+            count = (loopAsConditional && !(await this.checkConditional(script.loop))) ? 0 : count - 1;
+        }
+        this.killProcess(pid);
     }
 
     async evalCommandChain(chain, pid) {
@@ -96,11 +168,9 @@ export class Interpretator extends EventTarget {
             if (typeof step === 'string') {
                 const result = await CommandManager.runCommand(step, pid);
                 // console.log('command result: ', result);
-            }
-            else if (Array.isArray(step)) {
+            } else if (Array.isArray(step)) {
                 await this.evalCommandParallel([...step], pid);
-            }
-            else if (typeof step === 'object') {
+            } else if (typeof step === 'object') {
                 await this.evalScripts([step]);
             }
             return this.evalCommandChain(chain, pid);
@@ -112,21 +182,11 @@ export class Interpretator extends EventTarget {
         return Promise.allSettled(chains.map(chain => this.evalCommandChain([...chain], pid)));
     }
 
-    async checkScriptConditional(conditional) {
-        const code = conditional.replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1"))');
-        const result = new AsyncFunction(`return ${code}`).call(this);
-        return result;
-    }
-
     async evalScriptsChain(chain) {
         // console.log('eval scripts chain: ', chain);
         const step = chain.shift();
         if (step) {
-            if (await this.checkScriptConditional(step.conditional)) {
-                const pid = this.newProcess(chain);
-                await this.evalCommandParallel(step.steps, pid);
-                this.killProcess(pid)
-            }
+            await this.loop(step);
             return this.evalScriptsChain(chain);
         }
     }
@@ -134,22 +194,7 @@ export class Interpretator extends EventTarget {
     async evalScriptsParallel(chains) {
         // console.log('eval scripts parallel: ', chains);
         await Promise.allSettled(chains.map(async (chain) => {
-            const pid = this.newProcess(chain);
-            let count = Number(chain.loop ?? 1);
-            // console.log('count: ', count)
-            while (count && this.#process[pid]) {
-                let resolver;
-                const promise = new Promise(resolve => resolver = resolve);
-                setTimeout(async () => {
-                    if (await this.checkScriptConditional(chain.conditional)) {
-                        await this.evalCommandParallel([...chain.steps], pid);
-                    }
-                    count--;
-                    resolver();
-                })
-                await promise;
-            }
-            this.killProcess(pid);
+            await this.loop(chain);
         }));
     }
 
@@ -173,4 +218,4 @@ export class Interpretator extends EventTarget {
 }
 
 export const CommandManager = new Interpretator();
-window['$CommandManager'] = CommandManager; 
+window['$commandManager'] = CommandManager; 

@@ -22,7 +22,7 @@ game-js-night:
         children:
         - name: g-image
           attrs:
-            onclick: $CommandManager.runCommand('$cmd:run-script:about-box$')
+            onclick: $commandManager.runCommand('$cmd:run-script:about-box$')
             src: /img/box.png
             x: 714px
             y: 57px
@@ -71,16 +71,16 @@ game-js-night:
           children:
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-hall$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-hall$')
             children: Выйти в холл
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:start-search$')
+              onclick: $commandManager.runCommand('$cmd:run-script:start-search$')
             children: Осмотреть комнату
           - name: g-button
             attrs:
               conditional: "!$cmd:pg-inventory-has-item:1$"
-              onclick: $CommandManager.runCommand('$cmd:pg-inventory-set-item:1$')
+              onclick: $commandManager.runCommand('$cmd:pg-inventory-set-item:1$')
             children: Получить изоленту
     - name: g-title
       attrs:

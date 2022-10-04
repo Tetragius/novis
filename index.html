@@ -21,14 +21,14 @@
                     <g-dialog-menu conditional="$gameData.global.isShowMenu" x="50" y="50">
                         <g-group>
                             <g-button conditional="!$gameData.global.isStarted"
-                                onclick="$CommandManager.runCommand('$cmd:start-game$')">
+                                onclick="$commandManager.runCommand('$cmd:start-game$')">
                                 Новая игра
                             </g-button>
-                            <g-button onclick="$CommandManager.runCommand('$cmd:set-global-data:isShowSettings:true$')">
+                            <g-button onclick="$commandManager.runCommand('$cmd:set-global-data:isShowSettings:true$')">
                                 Настройки
                             </g-button>
                             <g-button conditional="$gameData.global.isStarted"
-                                onclick="$CommandManager.runCommand('$cmd:end-game$')">Выход</g-button>
+                                onclick="$commandManager.runCommand('$cmd:end-game$')">Выход</g-button>
                         </g-group>
                     </g-dialog-menu>
                     <g-dialog-menu conditional="$gameData.global.isPaused">

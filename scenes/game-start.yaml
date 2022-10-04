@@ -121,26 +121,26 @@ game-start:
           - name: g-button
             attrs:
               conditional: "!$cmd:get-scene-data:this:isNight$"
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-nata$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-nata$')
             children: Пойти в комнату Наташи
           - name: g-button
             attrs:
               conditional: $cmd:get-scene-data:this:isNight$
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-сhloe$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-сhloe$')
             children: Пойти в комнату Хлои
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-dima$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-dima$')
             children: Пойти в комнату Димы
           - name: g-button
             attrs:
               conditional: "!$cmd:get-scene-data:this:isNight$"
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-night$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-night$')
             children: Ждать до вечера
           - name: g-button
             attrs:
               conditional: $cmd:get-scene-data:this:isNight$
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-day$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-day$')
             children: Ждать до утра
     - name: g-title
       attrs:

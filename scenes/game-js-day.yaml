@@ -49,7 +49,7 @@ game-js-day:
         children:
         - name: g-image
           attrs:
-            onclick: $CommandManager.runCommand('$cmd:increment-scene-data:this:count:1$')
+            onclick: $commandManager.runCommand('$cmd:increment-scene-data:this:count:1$')
             src: /img/target1.png
             w: 150px
             h: 150px
@@ -71,16 +71,16 @@ game-js-day:
           children:
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:to-hall$')
+              onclick: $commandManager.runCommand('$cmd:run-script:to-hall$')
             children: Выйти в холл
           - name: g-button
             attrs:
-              onclick: $CommandManager.runCommand('$cmd:run-script:mini-game$')
+              onclick: $commandManager.runCommand('$cmd:run-script:mini-game$')
             children: Мини-игра
           - name: g-button
             attrs:
               conditional: "$cmd:pg-inventory-has-item:1$"
-              onclick: $CommandManager.runCommand('$cmd:pg-inventory-remove-item:1$')
+              onclick: $commandManager.runCommand('$cmd:pg-inventory-remove-item:1$')
             children: Отдать изоленту
     - name: g-title
       attrs:
@@ -96,6 +96,7 @@ game-js-day:
     isFirstTime: true
     isShowTitle: false
     isStartClickGame: false
+    test: true
     count: 0
   # Скрипты
   scripts:
@@ -153,8 +154,7 @@ game-js-day:
         - $cmd:set-scene-data:this:isStartClickGame:true$
 
         - conditional: "$cmd:get-scene-data:this:count$ === 3"
-          parallel: true
-          loop: Infinity
+          awaitConditional: true
           steps:          
           - - $cmd:set-scene-data:this:isStartClickGame:false$
             - $cmd:set-scene-data:this:isShowNata:true$
@@ -165,4 +165,7 @@ game-js-day:
             - $cmd:set-scene-data:this:isShowSelect:true$        
             - $cmd:set-scene-data:this:count:0$
             - $cmd:kill-this-script$
+
+        - $cmd:wait:1$
+        - $cmd:set-dialog-message:dialog:Что дальше!$
 
