@@ -13,8 +13,7 @@ export class TitledDialog extends GameElement {
         position: absolute; 
         left: 50%; 
         transform: translateX(-50%); 
-        bottom: 24px; 
-        padding: 24px; 
+        bottom: 64px; 
         z-index: 2;
     }
 

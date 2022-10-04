@@ -1,3 +1,4 @@
+import { GameManager } from './gameManager.js';
 import { DataManager } from './dataManager.js';
 import { CommandManager } from './commandManager.js'
 import { AnimationManager } from './animationManager.js'
@@ -22,6 +23,7 @@ export class Plugins extends EventTarget {
         this.plugins = {
             ...this.plugins,
             [module.name]: new module.default({
+                GameManager,
                 DataManager,
                 CommandManager,
                 AnimationManager,

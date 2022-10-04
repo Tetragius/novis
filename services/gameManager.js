@@ -18,6 +18,11 @@ export class Manager extends EventTarget {
         await this.initialScene();
     }
 
+    entryRef = document.getElementById('g-entry');
+    bottomGroupRef = document.getElementById('bottom-group');
+    menuGroupRef = document.getElementById('menu-group');
+    settingsBlockRef = document.getElementById('settings-block');
+
     keyUpHandler(e) {
         if (DataManager.global.isStarted) {
             switch (e.key.toUpperCase()) {
@@ -32,29 +37,37 @@ export class Manager extends EventTarget {
 
     keyDownHandler(e) {
         if (DataManager.global.isStarted) {
-            switch (e.key.toUpperCase()) {
-                case 'CONTROL':
+            switch (e.keyCode) {
+                case 17: // Control
                     DataManager.setGlobalData('isSkipMode', true);
                     return;
-                case 'ESCAPE':
+                case 27: // Escape
+                    console.log(1);
+                    if (DataManager.global.sysDialogName) {
+                        DataManager.setGlobalData('sysDialogName', '');
+                        return;
+                    }
+                    console.log(2);
+                    DataManager.setGlobalData('isPaused', false)
                     DataManager.setGlobalData('isShowMenu', !DataManager.global.isShowMenu);
                     return;
-                case 'C':
-                case 'С':
-                    DataManager.setGlobalData('isShowSettings', !DataManager.global.isShowSettings);
+                case 67:
+                    DataManager.setGlobalData('isShowMenu', false);
+                    DataManager.setGlobalData('sysDialogName', 'config');
                     return;
-                case 'P':
-                case 'З':
-                    DataManager.setGlobalData('isPaused', !DataManager.global.isPaused);
+                case 80:
+                    if (!DataManager.global.sysDialogName && !DataManager.global.isShowMenu) {
+                        DataManager.setGlobalData('isPaused', true);
+                    }
                     return;
                 default:
                     return;
             }
         }
         else {
-            switch (e.key.toUpperCase()) {
-                case 'ESCAPE':
-                    DataManager.setGlobalData('isShowSettings', false);
+            switch (e.keyCode) {
+                case 27:
+                    DataManager.setGlobalData('sysDialogName', '');
                     return;
                 default:
                     return;

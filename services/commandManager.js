@@ -53,11 +53,11 @@ export class Interpretator extends EventTarget {
 
     async pause() {
         return new Promise(resolve => {
-            if (!DataManager.global.isPaused) {
+            if (!DataManager.global.isPaused && !DataManager.global.sysDialogName && !DataManager.global.isShowMenu) {
                 resolve();
             } else {
                 const func = () => {
-                    if (!DataManager.global.isPaused) {
+                    if (!DataManager.global.isPaused && !DataManager.global.sysDialogName && !DataManager.global.isShowMenu) {
                         resolve();
                         DataManager.removeEventListener('change', func);
                     }
@@ -106,6 +106,10 @@ export class Interpretator extends EventTarget {
                 console.log('run command error: ', error);
             }
         });
+    }
+
+    async runCommands(commands, pid) {
+        return Promise.allSettled(commands.map(command => this.runCommand(command, pid)));
     }
 
     async checkConditional(conditional) {

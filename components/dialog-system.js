@@ -35,7 +35,7 @@ export class SystemDialog extends GameElement {
     setPosition() {
         super.setPosition();
         this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : 'calc(100% - 48px)';
-        this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : 'calc(100% - 48px)';
+        this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : 'calc(100% - 128px)';
     }
 
 }

@@ -52,6 +52,7 @@ GameManager.load(
             await import('/core-components/highlight.js');
             await import('/core-components/animate.js');
             await import('/core-components/transform.js');
+            await import('/core-components/div.js');
             // extended-components
             await import('/components/title.js');
             await import('/components/dialog.js');

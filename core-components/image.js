@@ -4,6 +4,31 @@ export class Image extends GameElement {
 
     constructor() {
         super();
+    }
+
+    set src(value) {
+        this.setAttribute('src', value);
+    }
+
+    set w(value) {
+        this.setAttribute('w', value);
+    }
+
+    set h(value) {
+        this.setAttribute('h', value);
+    }
+
+    set x(value) {
+        this.setAttribute('x', value);
+    }
+
+    set y(value) {
+        this.setAttribute('y', value);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
         this.style.position = 'absolute';
         this.style.display = 'block';
         this.style.backgroundRepeat = 'no-repeat';

@@ -1,6 +1,15 @@
 import { load } from '/libs/js-yaml.js';
 import { SceneManager } from './sceneManager.js';
 
+const JSONParseSafety = (value) => {
+    try {
+        return JSON.parse(value);
+    }
+    catch (e) {
+        return String(value);
+    }
+}
+
 class Data extends EventTarget {
     constructor() {
         super();
@@ -21,7 +30,7 @@ class Data extends EventTarget {
      * @memberof Data
      */
     setData(path, value) {
-        (new Function('value', `this.${path} = value`)).call(this, JSON.parse(value));
+        (new Function('value', `this.${path} = value`)).call(this, JSONParseSafety(value));
         this.notify();
     }
     /**
@@ -32,7 +41,7 @@ class Data extends EventTarget {
      * @memberof Data
      */
     setGlobalData(path, value) {
-        (new Function('value', `this.global.${path} = value`)).call(this, JSON.parse(value));
+        (new Function('value', `this.global.${path} = value`)).call(this, JSONParseSafety(value));
         this.notify();
     }
     /**
@@ -45,7 +54,7 @@ class Data extends EventTarget {
      */
     setSceneData(scene, path, value) {
         if (value === 'false' || value === 'true' || Number(value)) {
-            value = JSON.parse(value);
+            value = JSONParseSafety(value);
         }
         (new Function('value', `this.scenesData['${scene}'].data.${path} = value`))
             .call(this, value);
@@ -78,12 +87,10 @@ class Data extends EventTarget {
 
     global = {
         isStarted: false,
-        isBeasy: false,
         isPaused: false,
         isFinished: false,
-        isShowDialog: false,
         isShowMenu: false,
-        isShowSettings: false,
+        sysDialogName: '',
         isSkipMode: false,
     }
 

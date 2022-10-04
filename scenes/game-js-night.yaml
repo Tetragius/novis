@@ -80,7 +80,7 @@ game-js-night:
           - name: g-button
             attrs:
               conditional: "!$cmd:pg-inventory-has-item:1$"
-              onclick: $commandManager.runCommand('$cmd:pg-inventory-set-item:1$')
+              onclick: $commandManager.runCommand('$cmd:run-script:blue$')
             children: Получить изоленту
     - name: g-title
       attrs:
@@ -156,3 +156,9 @@ game-js-night:
         - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$
         
         - $cmd:set-scene-data:this:isShowSelect:true$
+    blue:
+    - conditional: 'true'
+      steps:
+      - - $cmd:set-dialog-message:dialog:Держи! Изолента!$
+        
+        - $cmd:pg-inventory-set-item:1$

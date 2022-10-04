@@ -6,6 +6,7 @@ body {
     from {
         color: rgba(255, 255, 255, 0);
     }
+
     to {
         color: rgba(255, 255, 255, 1);
     }
@@ -25,4 +26,11 @@ body {
     z-index: 9999;
     font-size: 16pt;
     animation: loader 2s linear 0s infinite alternate;
+}
+
+#bottom {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
 }

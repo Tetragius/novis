@@ -11,38 +11,56 @@
 </head>
 
 <body style="user-select: none; margin: 0; background: black;">
+    <!--LOADER-->
     <div class="loader">Загрузка...</div>
+    <!--LOADER-->
     <g-game w="1024" h="768" color="black">
+        <!--eNTRYPOINT-->
         <div id="g-entry"></div>
+        <!--ENTRYPOINT-->
         <!--SYSTEM-->
         <g-filter backdrop name="sepia" value="100">
             <g-filter backdrop name="blur" value="10">
-                <g-layer
-                    conditional="!$gameData.global.isStarted || $gameData.global.isShowMenu ||$gameData.global.isShowSettings ||$gameData.global.isPaused">
+                <g-layer>
+                    <!--MENU-->
                     <g-dialog-menu conditional="$gameData.global.isShowMenu" x="50" y="50">
-                        <g-group>
+                        <g-group id="menu-group">
                             <g-button conditional="!$gameData.global.isStarted"
                                 onclick="$commandManager.runCommand('$cmd:start-game$')">
                                 Новая игра
                             </g-button>
-                            <g-button onclick="$commandManager.runCommand('$cmd:set-global-data:isShowSettings:true$')">
+                            <g-button
+                                onclick="$commandManager.runCommand('$cmd:set-global-data:sysDialogName:config$')">
                                 Настройки
                             </g-button>
                             <g-button conditional="$gameData.global.isStarted"
                                 onclick="$commandManager.runCommand('$cmd:end-game$')">Выход</g-button>
                         </g-group>
                     </g-dialog-menu>
-                    <g-dialog-menu conditional="$gameData.global.isPaused">
+                    <!--MENU-->
+                    <!--PAUSE-->
+                    <g-dialog-menu conditional="$gameData.global.isPaused && !$gameData.global.isShowMenu">
                         <g-group align="center">
                             <span>ПАУЗА</span>
                         </g-group>
                     </g-dialog-menu>
-                    <g-dialog-system conditional="$gameData.global.isShowSettings">
-                        <span style="display: flex; align-items: center;">Громкость: <g-range min="0" max="1"
-                                step="0.01" $value="$SFXManager.volume"
-                                onchange="$SFXManager.setVolume(event.target.value)"></g-range></span>
-                        <g-button onclick="$SFXManager.play()">Включить</g-button>
+                    <!--PAUSE-->
+                    <!--CONFIG-->
+                    <g-dialog-system conditional="$gameData.global.sysDialogName">
+                        <g-layer conditional="$gameData.global.sysDialogName === 'config'">
+                            <span style="display: flex; align-items: center;">Громкость: <g-range min="0" max="1"
+                                    step="0.01" $value="$SFXManager.volume"
+                                    onchange="$SFXManager.setVolume(event.target.value)"></g-range></span>
+                            <g-button onclick="$SFXManager.play()">Включить</g-button>
+                        </g-layer>
+                        <div id="settings-block"></div>
                     </g-dialog-system>
+                    <!--CONFIG-->
+                    <!--BOTTOM-->
+                    <div id="bottom" is="g-div" conditional="$gameData.global.isStarted">
+                        <g-group id="bottom-group" horizontal></g-group>
+                    </div>
+                    <!--BOTTOM-->
                 </g-layer>
             </g-filter>
         </g-filter>

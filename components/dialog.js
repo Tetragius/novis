@@ -12,8 +12,7 @@ export class Dialog extends GameElement {
         position: absolute; 
         left: 50%; 
         transform: translateX(-50%); 
-        bottom: 24px; 
-        padding: 24px; 
+        bottom: 64px;
         z-index: 2;
     }
 
@@ -32,7 +31,7 @@ export class Dialog extends GameElement {
     </g-window>
 `;
 
-    setPosition() { 
+    setPosition() {
         super.setPosition();
         this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : 'calc(100% - 48px)';
         this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : '150px';

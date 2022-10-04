@@ -1,4 +1,5 @@
 import { CommandManager } from './commandManager.js'
+import { GameManager } from './gameManager.js';
 
 export class Scenes extends EventTarget {
     constructor() {
@@ -43,8 +44,7 @@ export class Scenes extends EventTarget {
         const text = await response.text();
         var div = document.createElement('div');
         div.innerHTML = text;
-        const entry = document.getElementById('g-entry');
-        entry.before(div.firstChild);
+        GameManager.entryRef.before(div.firstChild);
     }
     /**
      *
@@ -54,8 +54,7 @@ export class Scenes extends EventTarget {
      */
     loadSceneFromTemplate(template) {
         const scene = this.parse(template);
-        const entry = document.getElementById('g-entry');
-        entry.before(scene);
+        GameManager.entryRef.before(scene);
     }
     /**
      *

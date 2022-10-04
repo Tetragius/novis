@@ -8,10 +8,13 @@ const defineComponents = (GameElement, DataManager, CommandManager) => {
 
         defineItems() {
             const temp = document.createElement('div');
-            Object.entries(DataManager.global.inventory).forEach(([_, name]) => {
-                const button = document.createElement('g-button');
-                button.innerHTML = name;
-                temp.appendChild(button);
+            Object.entries(DataManager.global.inventory).forEach(([_, item]) => {
+                const img = document.createElement('g-image');
+                img.src = item.src;
+                img.title = item.name;
+                img.w = '128px';
+                img.h = '128px';
+                temp.appendChild(img);
             });
             return temp.innerHTML;
         }
@@ -22,7 +25,6 @@ const defineComponents = (GameElement, DataManager, CommandManager) => {
             dialog.innerHTML = Object.keys(DataManager.global.inventory).length ? this.defineItems() : 'Инвентарь пуст';
         }
 
-        template = `<g-dialog-system></g-dialog-system>`;
     }
 
     customElements.define('pg-inventory', InventoryWindow);
@@ -30,6 +32,7 @@ const defineComponents = (GameElement, DataManager, CommandManager) => {
 
 export default class InventoryPlugin {
     constructor({
+        GameManager,
         DataManager,
         CommandManager,
         AnimationManager,
@@ -38,11 +41,12 @@ export default class InventoryPlugin {
         GameElement
     }) {
         DataManager.global['inventory'] = {};
-        DataManager.global['inventoryItems'] = { 1: 'Изолента' };
-        DataManager.global['isShowInventory'] = false;
+        DataManager.global['inventoryItems'] = { 1: { name: 'Изолента', src: '/img/изолента.png' } };
         CommandManager.registrCommands(this.commands);
 
         this.dm = DataManager;
+        this.gm = GameManager;
+        this.cm = CommandManager;
 
         defineComponents(GameElement, DataManager, CommandManager);
         this.init();
@@ -51,6 +55,7 @@ export default class InventoryPlugin {
     init = () => {
         document.body.addEventListener('keydown', this.keyDownHandler);
         this.draw();
+        this.drawMenuButton();
     }
 
     postLoad = async () => {
@@ -59,20 +64,30 @@ export default class InventoryPlugin {
     }
 
     draw = () => {
-        const entry = document.getElementById('g-entry');
         const layer = document.createElement('g-layer');
         layer.id = `plugin-${name}`;
-        layer.setAttribute('conditional', '$cmd:get-gloabl-data:isShowInventory$');
+        layer.setAttribute('conditional', '$cmd:get-gloabl-data:sysDialogName$ === "inventory"');
         const inventory = document.createElement('pg-inventory');
         layer.appendChild(inventory);
-        entry.after(layer);
+        this.gm.settingsBlockRef.after(layer);
     }
+
+
+    drawMenuButton = () => {
+        const button = document.createElement('g-button');
+        button.onclick = () => this.dm.setGlobalData('sysDialogName', 'inventory');
+        button.setAttribute('conditional', '$cmd:get-gloabl-data:isStarted$')
+        button.innerHTML = 'Инвентарь';
+
+        this.gm.bottomGroupRef.append(button);
+        this.gm.menuGroupRef.append(button.cloneNode(true));
+    };
 
     keyDownHandler = (e) => {
         if (this.dm.global.isStarted) {
-            const key = e.key.toUpperCase();
-            if (key === 'I' || key === 'Ш') {
-                this.dm.setGlobalData('isShowInventory', !this.dm.global.isShowInventory);
+            const keyCode = e.keyCode;
+            if (keyCode === 73) {
+                this.dm.setGlobalData('sysDialogName', 'inventory');
             }
         }
     }
