@@ -53,6 +53,11 @@ export default class InventoryPlugin {
         this.draw();
     }
 
+    postLoad = async () => {
+        // console.log('plugin post load');
+        return true;
+    }
+
     draw = () => {
         const entry = document.getElementById('g-entry');
         const layer = document.createElement('g-layer');

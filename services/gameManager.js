@@ -9,13 +9,13 @@ export class Manager extends EventTarget {
         super();
     }
 
-    init() {
+    async init() {
         window.addEventListener('keydown', this.keyDownHandler.bind(this));
         window.addEventListener('keyup', this.keyUpHandler.bind(this));
         this.addEventListener('changescene', async ({ detail }) => await SceneManager.changeScene(detail));
         this.addEventListener('startnewgame', this.startNewGame.bind(this));
         this.addEventListener('endgame', this.initialScene.bind(this));
-        this.initialScene();
+        await this.initialScene();
     }
 
     keyUpHandler(e) {
@@ -61,20 +61,36 @@ export class Manager extends EventTarget {
             }
         }
     }
-
+    /**
+     *
+     *
+     * @memberof Manager
+     */
     async startNewGame() {
         DataManager.setGlobalData('isStarted', true);
         DataManager.setGlobalData('isShowMenu', false);
         await SceneManager.goToStart();
     }
-
+    /**
+     *
+     *
+     * @memberof Manager
+     */
     async initialScene() {
         DataManager.setGlobalData('isStarted', false);
         DataManager.setGlobalData('isShowMenu', false);
         await SceneManager.goToInitial();
         DataManager.setGlobalData('isShowMenu', true);
     }
-
+    /**
+     *
+     *
+     * @param {string[]} gameDataSrc
+     * @param {string[]} animationsSrc
+     * @param {string[]} commandsSrc
+     * @param {string[]} pluginsSrc
+     * @memberof Manager
+     */
     async load(gameDataSrc, animationsSrc, commandsSrc, pluginsSrc) {
         await DataManager.loadData(gameDataSrc);
         for (const animationSrc of animationsSrc) {
@@ -86,6 +102,7 @@ export class Manager extends EventTarget {
         for (const pluginSrc of pluginsSrc) {
             await PluginManager.definePlugin(pluginSrc);
         }
+        await PluginManager.postLoad();
     }
 }
 

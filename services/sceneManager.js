@@ -8,7 +8,13 @@ export class Scenes extends EventTarget {
     currentScene = null;
     currentSceneName = null;
     currentSceneElem = null;
-
+    /**
+     *
+     *
+     * @param {Object} json
+     * @return {HTMLElement} 
+     * @memberof Scenes
+     */
     parse(json) {
         if (typeof json === 'string') { return document.createTextNode(json) }
 
@@ -26,7 +32,12 @@ export class Scenes extends EventTarget {
 
         return element;
     }
-
+    /**
+     *
+     *
+     * @param {string} sceneName
+     * @memberof Scenes
+     */
     async loadSceneFromHTML(sceneName) {
         const response = await fetch(`scenes/${sceneName}.html`);
         const text = await response.text();
@@ -35,13 +46,23 @@ export class Scenes extends EventTarget {
         const entry = document.getElementById('g-entry');
         entry.before(div.firstChild);
     }
-
+    /**
+     *
+     *
+     * @param {Object} template
+     * @memberof Scenes
+     */
     loadSceneFromTemplate(template) {
         const scene = this.parse(template);
         const entry = document.getElementById('g-entry');
         entry.before(scene);
     }
-
+    /**
+     *
+     *
+     * @param {string} sceneName
+     * @memberof Scenes
+     */
     async changeScene(sceneName) {
         const scene = window["$gameScenes"][sceneName];
         const promise = new Promise(resolve => scene.onmount = resolve);
@@ -54,11 +75,19 @@ export class Scenes extends EventTarget {
         await promise;
         await CommandManager.evalScripts(scene.data?.scripts?.onIn);
     }
-
+    /**
+     *
+     *
+     * @memberof Scenes
+     */
     async goToInitial() {
         this.changeScene('initial');
     }
-
+    /**
+     *
+     *
+     * @memberof Scenes
+     */
     async goToStart() {
         const sceneName = Object.entries(window["$gameScenes"])
             .filter(([_, { data }]) => data.startFrom)

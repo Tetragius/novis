@@ -5,21 +5,44 @@ class Data extends EventTarget {
     constructor() {
         super();
     }
-
+    /**
+     *
+     *
+     * @memberof Data
+     */
     notify() {
         this.dispatchEvent(new CustomEvent('change'));
     }
-
+    /**
+     *
+     *
+     * @param {string} path
+     * @param {string} value
+     * @memberof Data
+     */
     setData(path, value) {
         (new Function('value', `this.${path} = value`)).call(this, JSON.parse(value));
         this.notify();
     }
-
+    /**
+     *
+     *
+     * @param {string} path
+     * @param {string} value
+     * @memberof Data
+     */
     setGlobalData(path, value) {
         (new Function('value', `this.global.${path} = value`)).call(this, JSON.parse(value));
         this.notify();
     }
-
+    /**
+     *
+     *
+     * @param {string} scene
+     * @param {string} path
+     * @param {string} value
+     * @memberof Data
+     */
     setSceneData(scene, path, value) {
         if (value === 'false' || value === 'true' || Number(value)) {
             value = JSON.parse(value);
@@ -28,7 +51,13 @@ class Data extends EventTarget {
             .call(this, value);
         this.notify();
     }
-
+    /**
+     *
+     *
+     * @param {string} url
+     * @return {Promise<boolean>} 
+     * @memberof Data
+     */
     async loadData(url) {
         const response = await fetch(url);
         const json = await response.json();

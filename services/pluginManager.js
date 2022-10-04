@@ -10,7 +10,13 @@ export class Plugins extends EventTarget {
     }
 
     plugins = {};
-
+    /**
+     *
+     *
+     * @param {string} src
+     * @return {Promise<boolean>} 
+     * @memberof Plugins
+     */
     async definePlugin(src) {
         const module = await import(src);
         this.plugins = {
@@ -27,6 +33,11 @@ export class Plugins extends EventTarget {
         return true;
     }
 
+    async postLoad() {
+        return Promise.allSettled(Object.entries(this.plugins).map(([_, plugin]) => {
+            plugin?.postLoad();
+        }))
+    }
 
 }
 
