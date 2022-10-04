@@ -96,7 +96,6 @@ game-js-day:
     isFirstTime: true
     isShowTitle: false
     isStartClickGame: false
-    test: true
     count: 0
   # Скрипты
   scripts:
