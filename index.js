@@ -32,7 +32,8 @@ GameManager.load(
         '/commands/commands-sound.js',
     ],
     [
-        '/plugins/plugin-inventory.js'
+        '/plugins/plugin-inventory.js',
+        '/plugins/plugin-dialog-history.js'
     ]
 )
     .then(

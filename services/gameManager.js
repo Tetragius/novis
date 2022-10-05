@@ -42,12 +42,10 @@ export class Manager extends EventTarget {
                     DataManager.setGlobalData('isSkipMode', true);
                     return;
                 case 27: // Escape
-                    console.log(1);
                     if (DataManager.global.sysDialogName) {
                         DataManager.setGlobalData('sysDialogName', '');
                         return;
                     }
-                    console.log(2);
                     DataManager.setGlobalData('isPaused', false)
                     DataManager.setGlobalData('isShowMenu', !DataManager.global.isShowMenu);
                     return;

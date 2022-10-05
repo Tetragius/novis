@@ -37,7 +37,7 @@ export class Plugins extends EventTarget {
 
     async postLoad() {
         return Promise.allSettled(Object.entries(this.plugins).map(([_, plugin]) => {
-            plugin?.postLoad();
+            plugin?.postLoad?.();
         }))
     }
 
