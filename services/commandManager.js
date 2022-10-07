@@ -10,6 +10,11 @@ import { DataManager } from "./dataManager.js";
 
 const AsyncFunction = (async function () { }).constructor;
 
+const safityArrayFrom = (value) => {
+    if (Array.isArray(value)) return [...value];
+    else return [value];
+}
+
 export class Interpretator extends EventTarget {
     constructor() {
         super();
@@ -45,6 +50,7 @@ export class Interpretator extends EventTarget {
     }
 
     killProcess(id) {
+        console.groupEnd();
         if (this.#process[id]) {
             delete this.#process[id].pid;
             delete this.#process[id];
@@ -53,7 +59,7 @@ export class Interpretator extends EventTarget {
 
     async pause() {
         return new Promise(resolve => {
-            if (!DataManager.global.isPaused && !DataManager.global.sysDialogName && !DataManager.global.isShowMenu) {
+            if ((!DataManager.global.isPaused && !DataManager.global.sysDialogName && !DataManager.global.isShowMenu) || !DataManager.global.isStarted) {
                 resolve();
             } else {
                 const func = () => {
@@ -91,7 +97,7 @@ export class Interpretator extends EventTarget {
     }
 
     async runCommand(command, pid) {
-        // console.log('run command: ', command, pid);
+        pid && console.log('run command: ', command);
         command = await this.prepareCommand(command);
         const parse = /\$cmd:(.*?)(:(.*?))?\$/gm.exec(command);
         const cmd = this.commands[parse[1]];
@@ -99,7 +105,7 @@ export class Interpretator extends EventTarget {
         return new Promise(resolve => {
             try {
                 this.dispatchEvent(new CustomEvent('runcommand', { detail: { command, args } }));
-                cmd(...args, resolve, pid);
+                cmd(...args, pid, resolve);
                 this.dispatchEvent(new CustomEvent('finishcommand', { detail: { command, args } }));
             }
             catch (error) {
@@ -146,12 +152,13 @@ export class Interpretator extends EventTarget {
         }
 
         const pid = this.newProcess(script);
+        console.group(`%c${pid}`, 'color: green');
         while (count && this.#process[pid]) {
             let resolver;
             const promise = new Promise(resolve => resolver = resolve);
             setTimeout(async () => {
                 if (await this.resolveScriptConditional(script)) {
-                    await this.evalCommandParallel([...script.steps], pid);
+                    await this.evalCommandChain([...script.steps], pid);
                 }
                 resolver();
             });
@@ -173,9 +180,11 @@ export class Interpretator extends EventTarget {
                 const result = await CommandManager.runCommand(step, pid);
                 // console.log('command result: ', result);
             } else if (Array.isArray(step)) {
+                console.group('%cparallel', 'color: blue');
                 await this.evalCommandParallel([...step], pid);
+                console.groupEnd();
             } else if (typeof step === 'object') {
-                await this.evalScripts([step]);
+                await this.evalScripts([step], false, pid);
             }
             return this.evalCommandChain(chain, pid);
         }
@@ -183,7 +192,7 @@ export class Interpretator extends EventTarget {
 
     async evalCommandParallel(chains, pid) {
         // console.log('eval command parallel: ', chains, pid);
-        return Promise.allSettled(chains.map(chain => this.evalCommandChain([...chain], pid)));
+        return Promise.allSettled(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid)));
     }
 
     async evalScriptsChain(chain) {
@@ -202,12 +211,16 @@ export class Interpretator extends EventTarget {
         }));
     }
 
-    async evalScripts(scripts = [], kill = false) {
+    async evalScripts(scripts = [], kill = false, parentId) {
         // console.log('eval scripts', scripts, kill);
         if (kill) {
             for (let proc in this.#process) {
                 this.killProcess(proc);
             }
+        }
+
+        if (parentId) {
+            scripts.forEach(script => script['parentId'] = parentId)
         }
 
         const series = scripts.filter(script => !script.parallel);

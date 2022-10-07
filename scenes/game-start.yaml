@@ -166,120 +166,103 @@ game-start:
     onIn:
     - conditional: 'true'
       steps:
-      - - $cmd:fadeIn:1$
-        - $cmd:sfx-background:/sfx/Sneaky-Snitch.mp3$
-        - $cmd:sfx-in$
-
-        - $cmd:set-scene-data:this:isShowTitle:true$
-        - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
-        - $cmd:wait:1$
-        - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
-        - $cmd:set-scene-data:this:isShowTitle:false$
-
-    - conditional: $cmd:get-scene-data:this:isFirstTime$
+      - "$cmd:fadeIn:1$"
+      - "$cmd:sfx-background:/sfx/Sneaky-Snitch.mp3$"
+      - "$cmd:sfx-in$"
+      - "$cmd:set-scene-data:this:isShowTitle:true$"
+      - "$cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$"
+      - "$cmd:wait:1$"
+      - "$cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$"
+      - "$cmd:set-scene-data:this:isShowTitle:false$"
+    - conditional: "$cmd:get-scene-data:this:isFirstTime$"
       steps:
-      - - $cmd:set-scene-data:this:isShowNata:true$
-        - $cmd:play-animation-on:nata:lightSpeedInLeft:1:1:nata-animation$
-        - $cmd:wait:1$
-
-        - $cmd:set-scene-data:this:isShowDialogTitled:true$
-        - $cmd:set-dialog-titled:dialog_tl:Наташа:Как тебя зовут?$
-        - $cmd:wait:1$
-
-        - $cmd:set-scene-data:this:isShowDialogTitled:false$
-        - $cmd:set-scene-data:this:isShowDialogTitledInput:true$
-        - $cmd:read-dialog-input:dialog_inp:Тебя зовут:inputData$
-        - $cmd:set-scene-data:this:isShowDialogTitledInput:false$  
-        - $cmd:set-scene-data:this:isShowDialogTitled:true$     
-
-        - - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$
-          - - $cmd:set-dialog-titled:dialog_tl:Наташа:Привет, ($cmd:get-scene-data:this:inputData$)!$
-        - $cmd:wait:1$
-
-        - $cmd:set-scene-data:this:isShowChloe:true$
-        - $cmd:play-animation-on:chloe:lightSpeedInRight:1:1:chloe-animation$
-        - $cmd:wait:1$
-
-        - $cmd:set-scene-data:this:isShowDialogTitled:true$
-        - $cmd:set-dialog-titled:dialog_tl:Хлоя:Привет!$
-
-        - $cmd:set-scene-data:this:isShowDima:true$
-        - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
-        - $cmd:wait:1$
-
-        - - - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$
-          - - $cmd:set-dialog-titled:dialog_tl:Дима:JAVAAAAAAA!!!!$
-        - $cmd:wait:1$
-
-        - - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-upset.png$
-          - - $cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-upset.png$
-          - - $cmd:set-dialog-titled:dialog_tl:Наташа и Хлоя:Не обращай внимания он джавист, они странные!$
-        - $cmd:wait:2$
-
-        - - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$
-          - - $cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-smile.png$
-
-        - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
-        - $cmd:set-scene-data:this:isShowDima:false$
-        - $cmd:wait:1$
-
-        - $cmd:set-dialog-titled:dialog_tl:Хлоя и Наташа:Ладно, пока!$
-        - $cmd:wait:1$
-
-        - $cmd:set-scene-data:this:isShowDialogTitled:false$
-
-        - - - $cmd:play-animation-on:chloe:lightSpeedOutRight:1:1:chloe-animation$
-          - - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-        
-        - - - $cmd:set-scene-data:this:isShowChloe:false$
-          - - $cmd:set-scene-data:this:isShowNata:false$
-
-        - $cmd:set-scene-data:this:isShowSelect:true$
-        - $cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$
-
+      - "$cmd:set-scene-data:this:isShowNata:true$"
+      - "$cmd:play-animation-on:nata:lightSpeedInLeft:1:1:nata-animation$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowDialogTitled:true$"
+      - "$cmd:set-dialog-titled:dialog_tl:Наташа:Как тебя зовут?$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowDialogTitled:false$"
+      - "$cmd:set-scene-data:this:isShowDialogTitledInput:true$"
+      - "$cmd:read-dialog-input:dialog_inp:Тебя зовут:inputData$"
+      - "$cmd:set-scene-data:this:isShowDialogTitledInput:false$"
+      - "$cmd:set-scene-data:this:isShowDialogTitled:true$"
+      - - "$cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$"
+        - "$cmd:set-dialog-titled:dialog_tl:Наташа:Привет, ($cmd:get-scene-data:this:inputData$)!$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowChloe:true$"
+      - "$cmd:play-animation-on:chloe:lightSpeedInRight:1:1:chloe-animation$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowDialogTitled:true$"
+      - "$cmd:set-dialog-titled:dialog_tl:Хлоя:Привет!$"
+      - "$cmd:set-scene-data:this:isShowDima:true$"
+      - "$cmd:play-animation-on:dima:blurIn:1:1:dima-animation$"
+      - "$cmd:wait:1$"
+      - - "$cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$"
+        - "$cmd:set-dialog-titled:dialog_tl:Дима:JAVAAAAAAA!!!!$"
+      - "$cmd:wait:1$"
+      - - "$cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-upset.png$"
+        - "$cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-upset.png$"
+        - "$cmd:set-dialog-titled:dialog_tl:Наташа и Хлоя:Не обращай внимания он джавист,
+          они странные!$"
+      - "$cmd:wait:2$"
+      - - "$cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$"
+        - "$cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-smile.png$"
+      - "$cmd:play-animation-on:dima:blurOut:1:1:dima-animation$"
+      - "$cmd:set-scene-data:this:isShowDima:false$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-dialog-titled:dialog_tl:Хлоя и Наташа:Ладно, пока!$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowDialogTitled:false$"
+      - - "$cmd:play-animation-on:chloe:lightSpeedOutRight:1:1:chloe-animation$"
+        - "$cmd:play-animation-on:nata:blurOut:1:1:nata-animation$"
+      - - "$cmd:set-scene-data:this:isShowChloe:false$"
+        - "$cmd:set-scene-data:this:isShowNata:false$"
+      - "$cmd:set-scene-data:this:isShowSelect:true$"
+      - "$cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$"
     - conditional: "!$cmd:get-scene-data:this:isFirstTime$"
       steps:
-      - - $cmd:set-scene-data:this:isShowDialog:true$
-        - $cmd:set-dialog-message:dialog:Что бы мне сделать?$
-        - $cmd:set-scene-data:this:isShowSelect:true$
-        - $cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$
+      - "$cmd:set-scene-data:this:isShowDialog:true$"
+      - "$cmd:set-dialog-message:dialog:Что бы мне сделать?$"
+      - "$cmd:set-scene-data:this:isShowSelect:true$"
+      - "$cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$"
     onOut:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isFirstTime:false$
-        - $cmd:set-scene-data:this:isShowDialog:false$        
-        - $cmd:play-animation-on:select:zoomOut:0.2:1:zoom-animation$
-        - $cmd:set-scene-data:this:isShowSelect:false$
-        - $cmd:sfx-out$
-        - $cmd:fadeOut:1$
+      - "$cmd:set-scene-data:this:isFirstTime:false$"
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:play-animation-on:select:zoomOut:0.2:1:zoom-animation$"
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:sfx-out$"
+      - "$cmd:fadeOut:1$"
     to-day:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isShowSelect:false$
-        - $cmd:set-scene-data:this:isShowDialog:false$
-        - $cmd:wait:1$
-        - $cmd:set-scene-data:this:isNight:false$
-        - $cmd:set-scene-data:this:isShowSelect:true$
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isNight:false$"
+      - "$cmd:set-scene-data:this:isShowSelect:true$"
     to-night:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isShowSelect:false$
-        - $cmd:set-scene-data:this:isShowDialog:false$
-        - $cmd:wait:1$
-        - $cmd:set-scene-data:this:isNight:true$
-        - $cmd:set-scene-data:this:isShowSelect:true$
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isNight:true$"
+      - "$cmd:set-scene-data:this:isShowSelect:true$"
     to-nata:
     - conditional: 'true'
       steps:
-      - - $cmd:wait:1$
-        - $cmd:set-scene:game-js-day$
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene:game-js-day$"
     to-сhloe:
     - conditional: 'true'
       steps:
-      - - $cmd:wait:1$
-        - $cmd:set-scene:game-js-night$
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene:game-js-night$"
     to-dima:
     - conditional: 'true'
       steps:
-      - - $cmd:wait:1$
-        - $cmd:set-scene:game-java-room$
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene:game-java-room$"

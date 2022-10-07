@@ -94,17 +94,17 @@ export default class InventoryPlugin {
 
 
     commands = {
-        'pg-inventory-set-item': (id, resolver) => {
+        'pg-inventory-set-item': (id, pid, resolver) => {
             this.dm.global.inventory[id] = this.dm.global.inventoryItems[id];
             this.dm.notify();
             resolver('pg-inventory-set-item');
         },
-        'pg-inventory-remove-item': (id, resolver) => {
+        'pg-inventory-remove-item': (id, pid, resolver) => {
             delete this.dm.global.inventory[id];
             this.dm.notify();
             resolver('pg-inventory-remove-item');
         },
-        'pg-inventory-has-item': (id, resolver) => {
+        'pg-inventory-has-item': (id, pid, resolver) => {
             resolver(this.dm.global.inventory[id]);
         },
     }

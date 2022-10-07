@@ -101,70 +101,60 @@ game-js-day:
   scripts:
     onIn:
     - conditional: 'true'
-      steps:      
-      - - $cmd:fadeIn:1$
-        - - - $cmd:sfx-background:/sfx/Sunset.mp3$
-          - - $cmd:sfx-in$
-
-        - $cmd:set-scene-data:this:isShowTitle:true$
-        - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
-        - $cmd:wait:1$
-        - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
-        - $cmd:set-scene-data:this:isShowTitle:false$
-
-        - $cmd:wait:1$
-        - $cmd:set-scene-data:this:isShowNata:true$
-        - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
-    - conditional: $cmd:get-scene-data:this:isFirstTime$
       steps:
-      - - $cmd:set-scene-data:this:isShowNata:true$
-        - $cmd:set-scene-data:this:isShowDialog:true$
-        - $cmd:set-scene-data:this:isShowSelect:true$
+      - "$cmd:fadeIn:1$"
+      - - "$cmd:sfx-background:/sfx/Sunset.mp3$"
+        - "$cmd:sfx-in$"
+      - "$cmd:set-scene-data:this:isShowTitle:true$"
+      - "$cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$"
+      - "$cmd:wait:1$"
+      - "$cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$"
+      - "$cmd:set-scene-data:this:isShowTitle:false$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene-data:this:isShowNata:true$"
+      - "$cmd:play-animation-on:nata:blurIn:1:1:nata-animation$"
+    - conditional: "$cmd:get-scene-data:this:isFirstTime$"
+      steps:
+      - "$cmd:set-scene-data:this:isShowNata:true$"
+      - "$cmd:set-scene-data:this:isShowDialog:true$"
+      - "$cmd:set-scene-data:this:isShowSelect:true$"
     onOut:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isShowDialog:false$
-        - $cmd:set-scene-data:this:isShowSelect:false$
-        - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-        - $cmd:set-scene-data:this:isShowNata:false$
-        # - $cmd:set-scene-data:this:isFirstTime:false$
-        - $cmd:sfx-out$
-        - $cmd:fadeOut:1$
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:play-animation-on:nata:blurOut:1:1:nata-animation$"
+      - "$cmd:set-scene-data:this:isShowNata:false$"
+      - "$cmd:sfx-out$"
+      - "$cmd:fadeOut:1$"
     to-hall:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isShowSelect:false$
-        - $cmd:set-scene-data:this:isShowDialog:false$
-        - $cmd:wait:1$
-        - $cmd:set-scene:game-start$
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-scene:game-start$"
     mini-game:
     - conditional: 'true'
       steps:
-      - - $cmd:set-scene-data:this:isShowSelect:false$
-
-        - $cmd:set-dialog-message:dialog:Ткни три раза по мишени!$
-        - $cmd:wait:2$
-
-        - $cmd:set-scene-data:this:isShowDialog:false$        
-
-        - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-        - $cmd:set-scene-data:this:isShowNata:false$
-        
-        - $cmd:set-scene-data:this:isStartClickGame:true$
-
-        - conditional: "$cmd:get-scene-data:this:count$ === 3"
-          awaitConditional: true
-          steps:          
-          - - $cmd:set-scene-data:this:isStartClickGame:false$
-            - $cmd:set-scene-data:this:isShowNata:true$
-            - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
-            - $cmd:set-scene-data:this:isShowDialog:true$ 
-            - $cmd:set-dialog-message:dialog:Отлично!$
-            - $cmd:wait:1$
-            - $cmd:set-scene-data:this:isShowSelect:true$        
-            - $cmd:set-scene-data:this:count:0$
-            - $cmd:kill-this-script$
-
-        - $cmd:wait:1$
-        - $cmd:set-dialog-message:dialog:Что дальше!$
-
+      - "$cmd:set-scene-data:this:isShowSelect:false$"
+      - "$cmd:set-dialog-message:dialog:Ткни три раза по мишени!$"
+      - "$cmd:wait:2$"
+      - "$cmd:set-scene-data:this:isShowDialog:false$"
+      - "$cmd:play-animation-on:nata:blurOut:1:1:nata-animation$"
+      - "$cmd:set-scene-data:this:isShowNata:false$"
+      - "$cmd:set-scene-data:this:isStartClickGame:true$"
+      - conditional: "$cmd:get-scene-data:this:count$ === 3"
+        awaitConditional: true
+        steps:
+        - "$cmd:set-scene-data:this:isStartClickGame:false$"
+        - "$cmd:set-scene-data:this:isShowNata:true$"
+        - "$cmd:play-animation-on:nata:blurIn:1:1:nata-animation$"
+        - "$cmd:set-scene-data:this:isShowDialog:true$"
+        - "$cmd:set-dialog-message:dialog:Отлично!$"
+        - "$cmd:wait:1$"
+        - "$cmd:set-scene-data:this:isShowSelect:true$"
+        - "$cmd:set-scene-data:this:count:0$"
+        - "$cmd:kill-this-script$"
+      - "$cmd:wait:1$"
+      - "$cmd:set-dialog-message:dialog:Что дальше!$"

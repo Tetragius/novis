@@ -4,7 +4,7 @@ export class Game extends HTMLElement {
         super();
         this.style.display = 'block';
         this.style.position = 'fixed';
-        // this.style.overflow = 'hidden';
+        this.style.overflow = 'hidden';
         this.style.left = '50%';
         this.style.top = '50%';
         this.style.transform = 'translate(-50%, -50%)';
