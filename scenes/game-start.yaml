@@ -96,40 +96,7 @@ game-start:
           y: 48px
           w: 400px
           aspect-ratio: 1200/2160
-    # Cлой с элементами управления
-    - name: g-layer
-      children:
-      - name: g-dialog-menu
-        attrs:
-          id: select
-          conditional: $cmd:get-scene-data:this:isShowSelect$
-        children:
-        - name: g-group
-          children:
-          - name: g-button
-            attrs:
-              conditional: "!$cmd:get-scene-data:this:isNight$"
-              onclick: $commandManager.runCommand('$cmd:run-script:to-nata$')
-            children: Пойти в комнату Наташи
-          - name: g-button
-            attrs:
-              conditional: $cmd:get-scene-data:this:isNight$
-              onclick: $commandManager.runCommand('$cmd:run-script:to-сhloe$')
-            children: Пойти в комнату Хлои
-          - name: g-button
-            attrs:
-              onclick: $commandManager.runCommand('$cmd:run-script:to-dima$')
-            children: Пойти в комнату Димы
-          - name: g-button
-            attrs:
-              conditional: "!$cmd:get-scene-data:this:isNight$"
-              onclick: $commandManager.runCommand('$cmd:run-script:to-night$')
-            children: Ждать до вечера
-          - name: g-button
-            attrs:
-              conditional: $cmd:get-scene-data:this:isNight$
-              onclick: $commandManager.runCommand('$cmd:run-script:to-day$')
-            children: Ждать до утра
+    # Cлой с названием сцены
     - name: g-title
       attrs:
         id: title
@@ -194,19 +161,31 @@ game-start:
       title: Наташа и Хлоя
       text: Ладно, пока!
       duration: 2
+    choice-room:
+    - text: Куда пойти?
+      options:
+      - conditional: "!$cmd:get-scene-data:this:isNight$"
+        text: Пойти в комнату Наташи
+        action: $cmd:run-script:to-nata$
+      - conditional: "$cmd:get-scene-data:this:isNight$"
+        text: Пойти в комнату Хлои
+        action: $cmd:run-script:to-сhloe$
+      - text: Пойти в комнату Димы
+        action: $cmd:run-script:to-dima$
+      - conditional: "!$cmd:get-scene-data:this:isNight$"
+        text: Ждать до вечера
+        action: $cmd:run-script:to-night$
+      - conditional: "$cmd:get-scene-data:this:isNight$"
+        text: Ждать до утра
+        action: $cmd:run-script:to-day$
   # Данные
   data:
-    isShowDialogTitled: false
-    isShowDialog: false
-    isShowSelect: false
     isNight: false
     isFirstTime: true
     isShowNata: false
     isShowChloe: false
     isShowDima: false
     isShowTitle: false
-    isShowDialogTitledInput: false
-    inputData: ''
   # Скрипты
   scripts:
     onIn:
@@ -226,22 +205,14 @@ game-start:
     - conditional: $cmd:get-scene-data:this:isFirstTime$
       steps:    
       - $cmd:pg-dialog-play:first-meet$
-
-      - $cmd:set-scene-data:this:isShowSelect:true$
-      - $cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$
+      - $cmd:set-scene-data:this:isFirstTime:false$
     - conditional: "!$cmd:get-scene-data:this:isFirstTime$"
+      loop: "Infinity"
       steps:
-      - $cmd:set-scene-data:this:isShowDialog:true$
-      - $cmd:set-dialog:dialog:Что бы мне сделать?$
-      - $cmd:set-scene-data:this:isShowSelect:true$
-      - $cmd:play-animation-on:select:zoomIn:0.2:1:zoom-animation$
+      - $cmd:pg-dialog-play:choice-room$
     onOut:
     - conditional: true
       steps:
-      - $cmd:set-scene-data:this:isFirstTime:false$
-      - $cmd:set-scene-data:this:isShowDialog:false$
-      - $cmd:play-animation-on:select:zoomOut:0.2:1:zoom-animation$
-      - $cmd:set-scene-data:this:isShowSelect:false$
       - $cmd:sfx-out$
       - $cmd:fadeOut:1$
     to-day:

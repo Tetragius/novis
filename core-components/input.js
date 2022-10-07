@@ -8,7 +8,10 @@ export class Input extends GameElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this.shadowRoot.querySelector('input').onkeydown = (event) => this.dispatchEvent(new KeyboardEvent(event.type, event));
+        this.shadowRoot.querySelector('input').onkeydown = (event) => {
+            event.stopPropagation();
+            this.dispatchEvent(new KeyboardEvent(event.type, event));
+        }
     }
 
     #value = () => this.hasAttribute('$value') ? eval(this.getAttribute('$value')) : this.getAttribute('value') ?? '';

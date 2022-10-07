@@ -85,21 +85,23 @@ export default class InventoryPlugin {
                     await this.cm.evalCommandChain([...script], pid);
 
                     if (options?.length) {
-                        DIALOGS['menu'].element.conditional = true;
+                        DIALOGS.menu.element.innerHTML = '';
+                        DIALOGS.menu.element.conditional = true;
 
                         await new Promise((resolve) => {
+                            const group = document.createElement('g-group');
+                            DIALOGS.menu.element.append(group);
                             for (const option of options) {
                                 const button = document.createElement('g-button');
                                 button.innerHTML = option.text;
-                                button.conditional = option.conditional;
+                                button.conditional = option.conditional ?? true;
                                 button.action = option.action;
                                 button.onactioncomplete = () => resolve();
-                                DIALOGS['menu'].element.append(button);
+                                group.append(button);
                             }
                         });
 
-                        DIALOGS['menu'].element.conditional = false;
-                        DIALOGS['menu'].element.innerHTML = '';
+                        DIALOGS.menu.element.conditional = false;
                     }
 
                     DIALOGS[type].element.conditional = false;
