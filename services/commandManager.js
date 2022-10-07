@@ -91,21 +91,30 @@ export class Interpretator extends EventTarget {
     }
 
     async execCommandString(cmdString) {
-        const code = cmdString.replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1"))');
-        const result = new AsyncFunction(`return ${code}`).call(this);
-        return result;
+        try {
+            const code = String(cmdString).replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1"))');
+            const result = new AsyncFunction(`return ${code}`).call(this);
+            return result;
+        }
+        catch (error) {
+            console.log('exec command: ', error);
+        }
     }
 
-    async runCommand(command, pid) {
+    async runCommand(command, pid, prevStepReturns) {
         pid && console.log('run command: ', command);
         command = await this.prepareCommand(command);
         const parse = /\$cmd:(.*?)(:(.*?))?\$/gm.exec(command);
         const cmd = this.commands[parse[1]];
-        const args = parse[3] ? parse[3].split(':') : [];
+
+        const args = (parse[3] ? parse[3].split(':') : []).map(arg => {
+            return String(arg) === '->|' ? prevStepReturns : arg;
+        });
+
         return new Promise(resolve => {
             try {
                 this.dispatchEvent(new CustomEvent('runcommand', { detail: { command, args } }));
-                cmd(...args, pid, resolve);
+                cmd(...args, pid, resolve, prevStepReturns);
                 this.dispatchEvent(new CustomEvent('finishcommand', { detail: { command, args } }));
             }
             catch (error) {
@@ -170,29 +179,30 @@ export class Interpretator extends EventTarget {
         this.killProcess(pid);
     }
 
-    async evalCommandChain(chain, pid) {
+    async evalCommandChain(chain, pid, prevStepReturns) {
         // console.log('eval command chain: ', chain, pid);
         if (pid && !this.#process[pid]) return Promise.resolve();
         const step = chain.shift();
         if (step) {
+            let result = null;
             await this.pause();
             if (typeof step === 'string') {
-                const result = await CommandManager.runCommand(step, pid);
+                result = await CommandManager.runCommand(step, pid, prevStepReturns);
                 // console.log('command result: ', result);
             } else if (Array.isArray(step)) {
                 console.group('%cparallel', 'color: blue');
-                await this.evalCommandParallel([...step], pid);
+                result = await this.evalCommandParallel([...step], pid, prevStepReturns);
                 console.groupEnd();
             } else if (typeof step === 'object') {
                 await this.evalScripts([step], false, pid);
             }
-            return this.evalCommandChain(chain, pid);
+            return this.evalCommandChain(chain, pid, result);
         }
     }
 
-    async evalCommandParallel(chains, pid) {
+    async evalCommandParallel(chains, pid, prevStepReturns) {
         // console.log('eval command parallel: ', chains, pid);
-        return Promise.allSettled(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid)));
+        return Promise.allSettled(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid, prevStepReturns)));
     }
 
     async evalScriptsChain(chain) {

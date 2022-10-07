@@ -47,7 +47,7 @@ export const commands = {
         const data = func.call(DataManager.scenesData[sceneName]?.data);
         resolver(data);
     },
-    'get-gloabl-data': (path, pid, resolver) => {
+    'get-global-data': (path, pid, resolver) => {
         const func = new Function(`return this.${path}`);
         const data = func.call(DataManager.global);
         resolver(data);

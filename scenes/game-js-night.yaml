@@ -100,53 +100,53 @@ game-js-night:
     onIn:
     - conditional: 'true'
       steps:
-      - "$cmd:fadeIn:1$"
-      - - "$cmd:sfx-background:/sfx/journey-end.mp3$"
-        - "$cmd:sfx-in$"
-      - "$cmd:set-scene-data:this:isShowTitle:true$"
-      - "$cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$"
-      - "$cmd:wait:1$"
-      - "$cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$"
-      - "$cmd:set-scene-data:this:isShowTitle:false$"
-      - "$cmd:wait:1$"
-      - "$cmd:set-scene-data:this:isShowChloe:true$"
-      - "$cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$"
-      - "$cmd:set-scene-data:this:isShowDialog:true$"
-      - "$cmd:set-dialog-message:dialog:...$"
-      - "$cmd:set-scene-data:this:isShowSelect:true$"
+      - $cmd:fadeIn:1$
+      - - $cmd:sfx-background:/sfx/journey-end.mp3$
+        - $cmd:sfx-in$
+      - $cmd:set-scene-data:this:isShowTitle:true$
+      - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
+      - $cmd:wait:1$
+      - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
+      - $cmd:set-scene-data:this:isShowTitle:false$
+      - $cmd:wait:1$
+      - $cmd:set-scene-data:this:isShowChloe:true$
+      - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$
+      - $cmd:set-scene-data:this:isShowDialog:true$
+      - $cmd:set-dialog:dialog:...$
+      - $cmd:set-scene-data:this:isShowSelect:true$
     onOut:
     - conditional: 'true'
       steps:
-      - "$cmd:set-scene-data:this:isShowDialog:false$"
-      - "$cmd:set-scene-data:this:isShowSelect:false$"
-      - "$cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$"
-      - "$cmd:set-scene-data:this:isShowChloe:false$"
-      - "$cmd:sfx-out$"
-      - "$cmd:fadeOut:1$"
+      - $cmd:set-scene-data:this:isShowDialog:false$
+      - $cmd:set-scene-data:this:isShowSelect:false$
+      - $cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$
+      - $cmd:set-scene-data:this:isShowChloe:false$
+      - $cmd:sfx-out$
+      - $cmd:fadeOut:1$
     to-hall:
     - conditional: 'true'
       steps:
-      - "$cmd:wait:1$"
-      - "$cmd:set-scene:game-start$"
+      - $cmd:wait:1$
+      - $cmd:set-scene:game-start$
     start-search:
     - conditional: 'true'
       steps:
-      - "$cmd:set-scene-data:this:isShowDialog:false$"
-      - "$cmd:set-scene-data:this:isShowSelect:false$"
-      - "$cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$"
-      - "$cmd:set-scene-data:this:isShowChloe:false$"
-      - "$cmd:set-scene-data:this:isSearch:true$"
+      - $cmd:set-scene-data:this:isShowDialog:false$
+      - $cmd:set-scene-data:this:isShowSelect:false$
+      - $cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$
+      - $cmd:set-scene-data:this:isShowChloe:false$
+      - $cmd:set-scene-data:this:isSearch:true$
     about-box:
     - conditional: 'true'
       steps:
-      - "$cmd:set-scene-data:this:isShowDialog:true$"
-      - "$cmd:set-dialog-message:dialog:Это моя коробка!$"
-      - "$cmd:set-scene-data:this:isSearch:false$"
-      - "$cmd:set-scene-data:this:isShowChloe:true$"
-      - "$cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$"
-      - "$cmd:set-scene-data:this:isShowSelect:true$"
+      - $cmd:set-scene-data:this:isShowDialog:true$
+      - $cmd:set-dialog:dialog:Это моя коробка!$
+      - $cmd:set-scene-data:this:isSearch:false$
+      - $cmd:set-scene-data:this:isShowChloe:true$
+      - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$
+      - $cmd:set-scene-data:this:isShowSelect:true$
     blue:
     - conditional: 'true'
       steps:
-      - "$cmd:set-dialog-message:dialog:Держи! Изолента!$"
-      - "$cmd:pg-inventory-set-item:1$"
+      - $cmd:set-dialog:dialog:Держи! Изолента!$
+      - $cmd:pg-inventory-set-item:1$

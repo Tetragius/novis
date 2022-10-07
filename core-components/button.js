@@ -1,3 +1,4 @@
+import { CommandManager } from "../services/commandManager.js";
 import { SFXManager } from "../services/sfxManager.js";
 import { GameElement } from "./element.js";
 
@@ -6,10 +7,24 @@ export class Button extends GameElement {
 
     constructor() {
         super();
-        this.addEventListener('click', () => SFXManager.sound('/sfx/click.wav'))
+        this.addEventListener('click', () => SFXManager.sound('/sfx/click.wav'));
+        this.addEventListener('click', this.doAction);
+        this.addEventListener('actioncomplete', () => this.onactioncomplete?.());
     }
 
-    setPosition(){
+    set action(value) {
+        this.setAttribute('action', value);
+    }
+
+    doAction = async () => {
+        if (this.hasAttribute('action')) {
+            const action = this.getAttribute('action');
+            await CommandManager.runCommands(action.split(','));
+            this.dispatchEvent(new CustomEvent('actioncomplete'));
+        }
+    }
+
+    setPosition() {
         super.setPosition();
         this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : '';
         this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : '';

@@ -15,7 +15,7 @@ export const commands = {
         await CommandManager.killProcess(pid);
         resolver('kill-this-script');
     },
-    'eval': (code, resolver) => {
+    'eval': (code, _, resolver) => {
         eval(code);
         resolver('eval');
     },
@@ -34,7 +34,6 @@ export const commands = {
     },
     'read-temp-value': (name, pid, resolver) => {
         const result = CommandManager.process[pid]['data']?.[name];
-        console.log(result);
         resolver(result);
     }
 }

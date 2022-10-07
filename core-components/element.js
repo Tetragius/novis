@@ -3,10 +3,6 @@ import { CommandManager } from '../services/commandManager.js';
 
 export class GameElement extends HTMLElement {
 
-    get css() {
-        return `<style>${this._css}</style>`;
-    }
-
     constructor(noShadow) {
         super();
 
@@ -22,6 +18,32 @@ export class GameElement extends HTMLElement {
 
         this.checkConditional();
     }
+
+    get css() {
+        return `<style>${this._css}</style>`;
+    }
+
+    set w(value) {
+        this.setAttribute('w', value);
+    }
+
+    set h(value) {
+        this.setAttribute('h', value);
+    }
+
+    set x(value) {
+        this.setAttribute('x', value);
+    }
+
+    set y(value) {
+        this.setAttribute('y', value);
+    }
+
+    set conditional(value) {
+        this.setAttribute('conditional', value);
+    }
+
+    get conditional() { return 'test'; }
 
     #observer = null;
     onunmount = null;

@@ -66,7 +66,7 @@ export default class InventoryPlugin {
     draw = () => {
         const layer = document.createElement('g-layer');
         layer.id = `plugin-${name}`;
-        layer.setAttribute('conditional', '$cmd:get-gloabl-data:sysDialogName$ === "inventory"');
+        layer.setAttribute('conditional', '$cmd:get-global-data:sysDialogName$ === "inventory"');
         const inventory = document.createElement('pg-inventory');
         layer.appendChild(inventory);
         this.gm.settingsBlockRef.after(layer);
@@ -76,7 +76,7 @@ export default class InventoryPlugin {
     drawMenuButton = () => {
         const button = document.createElement('g-button');
         button.onclick = () => this.dm.setGlobalData('sysDialogName', 'inventory');
-        button.setAttribute('conditional', '$cmd:get-gloabl-data:isStarted$')
+        button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
         button.innerHTML = 'Инвентарь';
 
         this.gm.bottomGroupRef.append(button);

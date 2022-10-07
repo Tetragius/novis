@@ -16,40 +16,29 @@ export const commands = {
         GameManager.initialScene();
         resolver('end-game');
     },
-    'set-dialog-message': (id, message, pid, resolver) => {
-        const dialog = SceneManager.currentSceneElem.querySelector(`g-dialog[id=${id}]`);
+    'set-dialog': (id, message, pid, resolver) => {
+        const dialog = document.querySelector(`g-dialog[id=${id}]`);
         dialog.innerHTML = message;
-        resolver('set-dialog-message');
+        resolver('set-dialog');
     },
     'set-dialog-titled': (id, title, message, pid, resolver) => {
-        const dialog = SceneManager.currentSceneElem.querySelector(`g-dialog-titled[id=${id}]`);
+        const dialog = document.querySelector(`g-dialog-titled[id=${id}]`);
         dialog.shadowRoot.querySelector('[title]').innerHTML = title;
         dialog.shadowRoot.querySelector('[message]').innerHTML = message;
         resolver('set-dialog-titled');
     },
-    'read-dialog-input': (id, title, key, pid, resolver) => {
-        const dialog = SceneManager.currentSceneElem.querySelector(`g-dialog-input[id=${id}]`);
+    'read-dialog-input': (id, title, _, resolver) => {
+        const dialog = document.querySelector(`g-dialog-input[id=${id}]`);
         dialog.shadowRoot.querySelector('[title]').innerHTML = title;
-        dialog.addEventListener('submit', async ({ detail }) => {
-            await CommandManager.runCommand(`$cmd:set-scene-data:this:${key}:${String(detail)}$`);
-            resolver('read-dialog-input');
-        }, { once: true })
-    },
-    'read-dialog-input-global': (id, title, key, pid, resolver) => {
-        const dialog = SceneManager.currentSceneElem.querySelector(`g-dialog-input[id=${id}]`);
-        dialog.shadowRoot.querySelector('[title]').innerHTML = title;
-        dialog.addEventListener('submit', async ({ detail }) => {
-            await CommandManager.runCommand(`$cmd:set-global-data:${key}:${String(detail)}$`);
-            resolver('read-dialog-input-global');
-        }, { once: true })
+        dialog.addEventListener('submit', async ({ detail }) => resolver(String(detail)), { once: true })
     },
     'set-title': (id, text, pid, resolver) => {
-        const dialog = SceneManager.currentSceneElem.querySelector(`g-title[id=${id}]`);
+        const dialog = document.querySelector(`g-title[id=${id}]`);
         dialog.innerHTML = text;
         resolver('show-title');
     },
     'change-attr': (id, values, pid, resolver) => {
-        const element = SceneManager.currentSceneElem.querySelector(`*[id=${id}]`);
+        const element = document.querySelector(`*[id=${id}]`);
         values.split('|').forEach(elem => {
             const pair = elem.split(',');
             element.setAttribute(pair[0], pair[1]);

@@ -33,36 +33,33 @@ GameManager.load(
     ],
     [
         '/plugins/plugin-inventory.js',
+        '/plugins/plugin-dialog.js',
         '/plugins/plugin-dialog-history.js'
+    ],
+    [
+        '/core-components/element.js',
+        '/core-components/game.js',
+        '/core-components/layer.js',
+        '/core-components/image.js',
+        '/core-components/scene.js',
+        '/core-components/input.js',
+        '/core-components/range.js',
+        '/core-components/window.js',
+        '/core-components/group.js',
+        '/core-components/button.js',
+        '/core-components/filter.js',
+        '/core-components/highlight.js',
+        '/core-components/animate.js',
+        '/core-components/transform.js',
+        '/core-components/div.js',
+        '/components/title.js',
+        '/components/dialog.js',
+        '/components/dialog-menu.js',
+        '/components/dialog-titled.js',
+        '/components/dialog-input.js',
+        '/components/dialog-system.js',
     ]
 )
-    .then(
-        async () => {
-            // base-components
-            await import('/core-components/element.js');
-            await import('/core-components/game.js');
-            await import('/core-components/layer.js');
-            await import('/core-components/image.js');
-            await import('/core-components/scene.js');
-            await import('/core-components/input.js');
-            await import('/core-components/range.js');
-            await import('/core-components/window.js');
-            await import('/core-components/group.js');
-            await import('/core-components/button.js');
-            await import('/core-components/filter.js');
-            await import('/core-components/highlight.js');
-            await import('/core-components/animate.js');
-            await import('/core-components/transform.js');
-            await import('/core-components/div.js');
-            // extended-components
-            await import('/components/title.js');
-            await import('/components/dialog.js');
-            await import('/components/dialog-menu.js');
-            await import('/components/dialog-titled.js');
-            await import('/components/dialog-input.js');
-            await import('/components/dialog-system.js');
-        }
-    )
     .then(() => GameManager.init())
     .then(() => {
         document.body.querySelector('.loader')?.remove();

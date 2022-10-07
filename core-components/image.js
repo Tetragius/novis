@@ -10,22 +10,6 @@ export class Image extends GameElement {
         this.setAttribute('src', value);
     }
 
-    set w(value) {
-        this.setAttribute('w', value);
-    }
-
-    set h(value) {
-        this.setAttribute('h', value);
-    }
-
-    set x(value) {
-        this.setAttribute('x', value);
-    }
-
-    set y(value) {
-        this.setAttribute('y', value);
-    }
-
     connectedCallback() {
         super.connectedCallback();
 

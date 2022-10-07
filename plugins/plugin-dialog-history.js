@@ -45,6 +45,11 @@ export default class DialogHistoryPlugin {
         CommandManager.addEventListener('finishcommand', ({ detail }) => {
             if (detail.command.includes('set-dialog-titled')) {
                 DataManager.global.dialogHistory.push({ name: detail.args[1], message: detail.args[2] });
+                return;
+            }
+            if (detail.command.includes('set-dialog')) {
+                DataManager.global.dialogHistory.push({ name: '', message: detail.args[1] });
+                return;
             }
         });
 
@@ -62,7 +67,7 @@ export default class DialogHistoryPlugin {
     draw = () => {
         const layer = document.createElement('g-layer');
         layer.id = `plugin-${name}`;
-        layer.setAttribute('conditional', '$cmd:get-gloabl-data:sysDialogName$ === "dialog-history"');
+        layer.setAttribute('conditional', '$cmd:get-global-data:sysDialogName$ === "dialog-history"');
         const inventory = document.createElement('pg-dialog-history');
         layer.appendChild(inventory);
         this.gm.settingsBlockRef.after(layer);
@@ -72,7 +77,7 @@ export default class DialogHistoryPlugin {
     drawMenuButton = () => {
         const button = document.createElement('g-button');
         button.onclick = () => this.dm.setGlobalData('sysDialogName', 'dialog-history');
-        button.setAttribute('conditional', '$cmd:get-gloabl-data:isStarted$')
+        button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
         button.innerHTML = 'История';
 
         this.gm.bottomGroupRef.append(button);

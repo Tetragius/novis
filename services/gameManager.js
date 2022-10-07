@@ -102,7 +102,7 @@ export class Manager extends EventTarget {
      * @param {string[]} pluginsSrc
      * @memberof Manager
      */
-    async load(gameDataSrc, animationsSrc, commandsSrc, pluginsSrc) {
+    async load(gameDataSrc, animationsSrc, commandsSrc, pluginsSrc, components) {
         await DataManager.loadData(gameDataSrc);
         for (const animationSrc of animationsSrc) {
             await AnimationManager.defineAnimations(animationSrc);
@@ -113,6 +113,7 @@ export class Manager extends EventTarget {
         for (const pluginSrc of pluginsSrc) {
             await PluginManager.definePlugin(pluginSrc);
         }
+        await Promise.all(components.map(component => import(component)));
         await PluginManager.postLoad();
     }
 }
