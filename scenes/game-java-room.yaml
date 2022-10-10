@@ -39,34 +39,56 @@ game-java-room:
           y: 48px
           w: 400px
           aspect-ratio: 1200/2160
-    # Cлой с элементами управления
-    - name: g-layer
-      children:
-      - name: g-dialog
-        attrs:
-          id: dialog
-          conditional: $cmd:get-scene-data:this:isShowDialog$
-      - name: g-dialog-menu
-        attrs:
-          id: select
-          conditional: $cmd:get-scene-data:this:isShowSelect$
-        children:
-        - name: g-group
-          children:
-          - name: g-button
-            attrs:
-              onclick: $commandManager.runCommand('$cmd:run-script:to-hall$')
-            children: Лучше уйти, он странный
+    # Cлой с названием сцены
     - name: g-title
       attrs:
         id: title
         conditional: $cmd:get-scene-data:this:isShowTitle$
       children:
       - Комната Димы
+  # Диалоги   
+  dialogs:
+    base:
+    - title: Дима      
+      text: JAAAAAAVAAAAAAAA!!
+      conditional: $cmd:get-temp-value:d$ === 1 # Читаем переменную "d"
+      actions:
+      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
+      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
+    
+    - title: Дима
+      text: Java? Java, java jaaava ja va! Ja va? Java!?  
+      conditional: $cmd:get-temp-value:d$ === 2 # Читаем переменную "d"
+      actions:
+      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
+      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$  
+      duration: 2
+
+    - title: Дима
+      text: Java-Java?
+      conditional: $cmd:get-temp-value:d$ === 3 # Читаем переменную "d"
+      actions:
+      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
+      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
+
+    - title: Дима
+      text: Java? Изолента... она напоменает мне о друге, он... *всхлипывет* потерял в бою матируещие салфетки..., и еще о друге мне напоминаешь ты...
+      conditional: $cmd:pg-inventory-has-item:1$
+      duration: 7
+      actions:
+      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
+      - $cmd:sfx-play-parallel:/sfx/helicopter.mp3$
+      postactions:
+      - $cmd:run-script:loose$
+      - $cmd:kill-this-script$
+
+    choice:
+      - text: Он странный лучше уйти...
+        options: 
+        - text: Выйти в холл
+          action: $cmd:run-script:to-hall$
   # Данные
   data:
-    isShowDialog: false
-    isShowSelect: false
     isShowDima: false
     isShowTitle: false
   # Скрипты
@@ -77,33 +99,37 @@ game-java-room:
       - $cmd:fadeIn:1$
       - - $cmd:sfx-background:/sfx/alexander-nakarada-silly-intro.mp3$
         - $cmd:sfx-in$
+
       - $cmd:set-scene-data:this:isShowTitle:true$
       - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
       - $cmd:wait:1$
+
       - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
       - $cmd:set-scene-data:this:isShowTitle:false$
       - $cmd:wait:1$
+
       - $cmd:set-scene-data:this:isShowDima:true$
       - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
-      - $cmd:set-scene-data:this:isShowDialog:true$
-      - $cmd:set-dialog:dialog:JAAAAAAVAAAAAAAA!$
-      - $cmd:wait:3$
-      - $cmd:set-dialog:dialog:Java? Java, java jaaava ja va! Ja va? Java!?$
-      - $cmd:wait:3$
-      - $cmd:set-scene-data:this:isShowSelect:true$
+
+      - $cmd:get-random-int:1:3$ # Получаем случайное целое число от 1 до 3
+      - $cmd:set-temp-value:d:{0}$ # Сохраняем его в пременнную "d"
+      - $cmd:pg-dialog-play:base$ 
+      - $cmd:pg-dialog-play:choice$ 
     onOut:
     - conditional: 'true'
       steps:
-      - $cmd:set-scene-data:this:isShowDialog:false$
-      - $cmd:set-scene-data:this:isShowSelect:false$
       - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
       - $cmd:set-scene-data:this:isShowDima:false$
+
       - $cmd:sfx-out$
       - $cmd:fadeOut:1$
     to-hall:
     - conditional: 'true'
       steps:
-      - $cmd:set-scene-data:this:isShowSelect:false$
-      - $cmd:set-scene-data:this:isShowDialog:false$
       - $cmd:wait:1$
       - $cmd:set-scene:game-start$
+    loose:
+    - conditional: 'true'
+      steps:
+      - $cmd:wait:1$
+      - $cmd:set-scene:loose$

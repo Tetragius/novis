@@ -25,7 +25,7 @@ const DIALOGS = {
 
 const constructCommand = (type, title, text) => {
     switch (type) {
-        case 'input': return `$cmd:read-dialog-input:${DIALOGS[type].id}:${text}$`;
+        case 'input': return `$cmd:get-dialog-input:${DIALOGS[type].id}:${text}$`;
         case 'titled': return `$cmd:set-dialog-titled:${DIALOGS[type].id}:${title}:${text}$`
         case 'dialog': return `$cmd:set-dialog:${DIALOGS[type].id}:${text}$`;
     }
@@ -68,7 +68,8 @@ export default class InventoryPlugin {
 
             for (const message of messages) {
                 const { type = 'dialog', conditional = true, duration = 1, preactions, actions, postactions, title, text, options } = message;
-                if (this.cm.checkConditional(conditional)) {
+
+                if (await this.cm.checkConditional(conditional, pid)) {
                     const script = [
                         ...(preactions ?? []),
                         [
@@ -93,6 +94,7 @@ export default class InventoryPlugin {
                                 const button = document.createElement('g-button');
                                 button.innerHTML = option.text;
                                 button.conditional = option.conditional ?? true;
+                                button.onclick = () => DIALOGS.menu.element.conditional = false;
                                 button.action = option.action;
                                 button.onactioncomplete = () => resolve();
                                 group.append(button);

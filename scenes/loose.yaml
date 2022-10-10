@@ -1,0 +1,37 @@
+---
+loose:
+  # Настройки
+  # Элементы
+  template:
+    name: g-scene
+    attrs:
+      id: loose
+      conditional: false
+    children:
+    - name: g-layer
+      attrs: {}
+      children:
+      - name: g-image
+        attrs:
+          src: /img/bad-end.jpg
+          w: 1024px
+          h: 768px
+        children: []
+  # Диалоги
+  dialogs:
+    base:    
+      - text: Никто не знает что, дима сделал с вами ночью, но проснулись вы джавистом, девушки в вас разочаровались и вы не смогли найти друзей...
+        postactions:
+          - $cmd:end-game$
+        duration: 7
+  # Скрипты
+  scripts:
+    onIn:
+    - conditional: 'true'
+      steps:
+      - $cmd:fadeIn:1$
+      - $cmd:pg-dialog-play:base$  
+    onOut:
+    - conditional: 'true'
+      steps:
+      - $cmd:fadeOut:1$

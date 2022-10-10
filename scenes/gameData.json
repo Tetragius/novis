@@ -3,5 +3,7 @@
     "game-start",
     "game-js-day",
     "game-js-night",
-    "game-java-room"
+    "game-java-room",
+    "loose",
+    "win"
 ]

@@ -69,7 +69,7 @@ game-js-night:
       text: О, привет, ($cmd:get-global-data:playerName$)!
     
     - title: Хлоя
-      conditional: $cmd:pg-inventory-has-item:1$
+      conditional: "!$cmd:pg-inventory-has-item:1$"
       text: Кстати, не мог бы потом занести изоленту Наташе?    
       duration: 2
 
@@ -93,6 +93,9 @@ game-js-night:
     blue:
     - title: Хлоя
       text: Держи, ($cmd:get-global-data:playerName$) - изолента!
+      
+    - title: Хлоя
+      text: Отнеси ее Наташе, но умоляю не заходи в уомнату к Диме...
   # Данные
   data:
     isShowChloe: false

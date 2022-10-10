@@ -32,7 +32,7 @@ export const commands = {
         CommandManager.process[pid]['data'][name] = value;
         resolver('set-temp-value');
     },
-    'read-temp-value': (name, pid, resolver) => {
+    'get-temp-value': (name, pid, resolver) => {
         const result = CommandManager.process[pid]['data']?.[name];
         resolver(result);
     }

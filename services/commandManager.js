@@ -90,10 +90,10 @@ export class Interpretator extends EventTarget {
         }
     }
 
-    async execCommandString(cmdString) {
+    async execCommandString(cmdString, pid) {
         try {
-            const code = String(cmdString).replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1"))');
-            const result = new AsyncFunction(`return ${code}`).call(this);
+            const code = String(cmdString).replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1", pid))');
+            const result = new AsyncFunction('pid', `return ${code}`).call(this, pid);
             return result;
         }
         catch (error) {
@@ -128,8 +128,8 @@ export class Interpretator extends EventTarget {
         return Promise.all(commands.map(command => this.runCommand(command, pid)));
     }
 
-    async checkConditional(conditional) {
-        const result = await this.execCommandString(conditional);
+    async checkConditional(conditional, pid) {
+        const result = await this.execCommandString(conditional, pid);
         return result;
     }
 
@@ -153,15 +153,16 @@ export class Interpretator extends EventTarget {
     }
 
     async loop(script) {
-        // console.log('loop: ', script)
+        // console.log('loop: ', script)        
+        const pid = this.newProcess(script);
+
         let count = Number(script.loop ?? 1);
         const loopAsConditional = Boolean(script.loop && isNaN(count));
 
         if (loopAsConditional) {
-            count = await this.checkConditional(script.loop) ? Infinity : 1;
+            count = await this.checkConditional(script.loop, pid) ? Infinity : 1;
         }
 
-        const pid = this.newProcess(script);
         console.group(`%c${pid}`, 'color: green');
         while (count && this.#process[pid]) {
             let resolver;
@@ -175,7 +176,7 @@ export class Interpretator extends EventTarget {
 
             await promise;
 
-            count = (loopAsConditional && !(await this.checkConditional(script.loop))) ? 0 : count - 1;
+            count = (loopAsConditional && !(await this.checkConditional(script.loop, pid))) ? 0 : count - 1;
         }
         this.killProcess(pid);
     }

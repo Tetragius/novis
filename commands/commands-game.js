@@ -15,6 +15,8 @@ export const commands = {
     'end-game': (pid, resolver) => {
         GameManager.initialScene();
         resolver('end-game');
+        // TODO: убрать
+        location.reload();
     },
     'set-dialog': (id, message, pid, resolver) => {
         const dialog = document.querySelector(`g-dialog[id=${id}]`);
@@ -27,7 +29,7 @@ export const commands = {
         dialog.shadowRoot.querySelector('[message]').innerHTML = message;
         resolver('set-dialog-titled');
     },
-    'read-dialog-input': (id, title, _, resolver) => {
+    'get-dialog-input': (id, title, _, resolver) => {
         const dialog = document.querySelector(`g-dialog-input[id=${id}]`);
         dialog.shadowRoot.querySelector('[title]').innerHTML = title;
         dialog.addEventListener('submit', async ({ detail }) => resolver(String(detail)), { once: true })
@@ -46,11 +48,11 @@ export const commands = {
         resolver('show-scene-title');
     },
     'get-random-int': (from, to, pid, resolver) => {
-        const value = Math.floor((Math.random() * to - from) + from);
+        const value = Math.floor((Math.random() * (1 + Number(to) - Number(from))) + Number(from));
         resolver(value);
     },
     'get-random-float': (from, to, pid, resolver) => {
-        const vallue = (Math.random() * to - from) + from;
+        const value = (Math.random() * (1 + Number(to) - Number(from))) + Number(from);
         resolver(value);
     },
 }

@@ -43,7 +43,7 @@ export class GameElement extends HTMLElement {
         this.setAttribute('conditional', value);
     }
 
-    get conditional() { return 'test'; }
+    get conditional() { return this.getAttribute('conditional'); }
 
     #observer = null;
     onunmount = null;
