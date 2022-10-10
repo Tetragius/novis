@@ -55,43 +55,46 @@ game-js-night:
           y: 48px
           w: 400px
           aspect-ratio: 1200/2160
-    # Cлой с элементами управления
-    - name: g-layer
-      children:
-      - name: g-dialog
-        attrs:
-          id: dialog
-          conditional: $cmd:get-scene-data:this:isShowDialog$
-      - name: g-dialog-menu
-        attrs:
-          id: select
-          conditional: $cmd:get-scene-data:this:isShowSelect$
-        children:
-        - name: g-group
-          children:
-          - name: g-button
-            attrs:
-              onclick: $commandManager.runCommand('$cmd:run-script:to-hall$')
-            children: Выйти в холл
-          - name: g-button
-            attrs:
-              onclick: $commandManager.runCommand('$cmd:run-script:start-search$')
-            children: Осмотреть комнату
-          - name: g-button
-            attrs:
-              conditional: "!$cmd:pg-inventory-has-item:1$"
-              onclick: $commandManager.runCommand('$cmd:run-script:blue$')
-            children: Получить изоленту
+    # Cлой с названием сцены
     - name: g-title
       attrs:
         id: title
         conditional: $cmd:get-scene-data:this:isShowTitle$
       children:
       - Комната Хлои
+  # Диалоги   
+  dialogs:
+    base:
+    - title: Хлоя
+      text: О, привет, ($cmd:get-global-data:playerName$)!
+    
+    - title: Хлоя
+      conditional: $cmd:pg-inventory-has-item:1$
+      text: Кстати, не мог бы потом занести изоленту Наташе?    
+      duration: 2
+
+    choice:
+    - title: Хлоя
+      text: Что хочешь сделать?
+      options: 
+      - conditional: "!$cmd:pg-inventory-has-item:1$"
+        text: Получить изоленту
+        action: $cmd:run-script:blue$
+      - conditional: true
+        text: Осмотреть комнату
+        action: $cmd:run-script:start-search$
+      - text: Выйти в холл
+        action: $cmd:run-script:to-hall$
+
+    box:
+    - title: Хлоя
+      text: Это моя коробка!
+    
+    blue:
+    - title: Хлоя
+      text: Держи, ($cmd:get-global-data:playerName$) - изолента!
   # Данные
   data:
-    isShowDialog: false
-    isShowSelect: false
     isShowChloe: false
     isShowTitle: false
     isSearch: false
@@ -103,24 +106,26 @@ game-js-night:
       - $cmd:fadeIn:1$
       - - $cmd:sfx-background:/sfx/journey-end.mp3$
         - $cmd:sfx-in$
+
       - $cmd:set-scene-data:this:isShowTitle:true$
       - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
       - $cmd:wait:1$
+
       - $cmd:play-animation-on:title:lightSpeedOutRight:2:1:title-animation$
       - $cmd:set-scene-data:this:isShowTitle:false$
       - $cmd:wait:1$
+
       - $cmd:set-scene-data:this:isShowChloe:true$
       - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$
-      - $cmd:set-scene-data:this:isShowDialog:true$
-      - $cmd:set-dialog:dialog:...$
-      - $cmd:set-scene-data:this:isShowSelect:true$
+
+      - $cmd:pg-dialog-play:base$ 
+      - $cmd:pg-dialog-play:choice$ 
     onOut:
     - conditional: 'true'
       steps:
-      - $cmd:set-scene-data:this:isShowDialog:false$
-      - $cmd:set-scene-data:this:isShowSelect:false$
       - $cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$
       - $cmd:set-scene-data:this:isShowChloe:false$
+
       - $cmd:sfx-out$
       - $cmd:fadeOut:1$
     to-hall:
@@ -131,22 +136,24 @@ game-js-night:
     start-search:
     - conditional: 'true'
       steps:
-      - $cmd:set-scene-data:this:isShowDialog:false$
-      - $cmd:set-scene-data:this:isShowSelect:false$
       - $cmd:play-animation-on:chloe:blurOut:1:1:chloe-animation$
       - $cmd:set-scene-data:this:isShowChloe:false$
+
       - $cmd:set-scene-data:this:isSearch:true$
     about-box:
     - conditional: 'true'
       steps:
-      - $cmd:set-scene-data:this:isShowDialog:true$
-      - $cmd:set-dialog:dialog:Это моя коробка!$
       - $cmd:set-scene-data:this:isSearch:false$
       - $cmd:set-scene-data:this:isShowChloe:true$
-      - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$
-      - $cmd:set-scene-data:this:isShowSelect:true$
+      - $cmd:play-animation-on:chloe:blurIn:1:1:chloe-animation$ 
+
+      - $cmd:pg-dialog-play:box$ 
+      - $cmd:pg-dialog-play:choice$ 
     blue:
     - conditional: 'true'
-      steps:
-      - $cmd:set-dialog:dialog:Держи! Изолента!$
+      steps:   
+      - $cmd:pg-dialog-play:blue$ 
+
       - $cmd:pg-inventory-set-item:1$
+
+      - $cmd:pg-dialog-play:choice$ 

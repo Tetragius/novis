@@ -8,7 +8,7 @@ import { DataManager } from "./dataManager.js";
 // poolId?: string
 // steps: Array of string or subArrays or scripts
 
-const AsyncFunction = (async function () { }).constructor;
+export const AsyncFunction = (async function () { }).constructor;
 
 const safityArrayFrom = (value) => {
     if (Array.isArray(value)) return [...value];
@@ -106,9 +106,10 @@ export class Interpretator extends EventTarget {
         command = await this.prepareCommand(command);
         const parse = /\$cmd:(.*?)(:(.*?))?\$/gm.exec(command);
         const cmd = this.commands[parse[1]];
-
+        prevStepReturns = Array.isArray(prevStepReturns) ? prevStepReturns : [prevStepReturns];
         const args = (parse[3] ? parse[3].split(':') : []).map(arg => {
-            return String(arg) === '->|' ? prevStepReturns : arg;
+            const temp = /{(\d)}/.exec(String(arg))?.[1];
+            return temp ? prevStepReturns[Number(temp)] : arg;
         });
 
         return new Promise(resolve => {
@@ -124,7 +125,7 @@ export class Interpretator extends EventTarget {
     }
 
     async runCommands(commands, pid) {
-        return Promise.allSettled(commands.map(command => this.runCommand(command, pid)));
+        return Promise.all(commands.map(command => this.runCommand(command, pid)));
     }
 
     async checkConditional(conditional) {
@@ -198,11 +199,12 @@ export class Interpretator extends EventTarget {
             }
             return this.evalCommandChain(chain, pid, result);
         }
+        return prevStepReturns;
     }
 
     async evalCommandParallel(chains, pid, prevStepReturns) {
         // console.log('eval command parallel: ', chains, pid);
-        return Promise.allSettled(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid, prevStepReturns)));
+        return Promise.all(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid, prevStepReturns)));
     }
 
     async evalScriptsChain(chain) {
@@ -216,7 +218,7 @@ export class Interpretator extends EventTarget {
 
     async evalScriptsParallel(chains) {
         // console.log('eval scripts parallel: ', chains);
-        await Promise.allSettled(chains.map(async (chain) => {
+        await Promise.all(chains.map(async (chain) => {
             await this.loop(chain);
         }));
     }

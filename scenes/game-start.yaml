@@ -106,43 +106,65 @@ game-start:
   # Диалоги   
   dialogs:
     first-meet:
+    - text: Мой первый день на новом месте!
+    - text: Как же я рад, надеюсь, что найду тут новых друзей!
+    - text: О вот кто-то идет!
+
     - type: titled
       preactions:
       - $cmd:set-scene-data:this:isShowNata:true$
       - $cmd:play-animation-on:nata:lightSpeedInLeft:1:1:nata-animation$
       - $cmd:wait:1$
-      title: Наташа
-      text: Привет, как тебя зовут?
+      title: '???'
+      text: Привет, Я Наташа - фронтендер, рада познакомиться!
       duration: 2
+
+    - type: titled
+      title: Наташа
+      text: Кстати, как тебя зовут?
+      duration: 2
+
     - type: input
       text: Меня зовут
       postactions:
-        - $cmd:set-global-data:playerName:->|$
+        - $cmd:set-global-data:playerName:{0}$
+
     - type: titled
       title: Наташа
-      text: Привет, ($cmd:get-global-data:playerName$)!$
+      text: Привет, ($cmd:get-global-data:playerName$)! Будем дружить.$
       duration: 2
+
     - type: titled
       preactions:
       - $cmd:set-scene-data:this:isShowChloe:true$
       - $cmd:play-animation-on:chloe:lightSpeedInRight:1:1:chloe-animation$
       - $cmd:wait:1$
-      title: Хлоя
-      text: Привет!
+      title: '???'
+      text: Привет! Наташа, кто это?
+      duration: 2  
+
+    - title: Наташа
+      text: Привет, Хлоя! Это ($cmd:get-global-data:playerName$). ($cmd:get-global-data:playerName$) это Хлоя - наш дизайнер.$
+
+    - title: Хлоя
+      text: Привет, ($cmd:get-global-data:playerName$)!$
       duration: 2
+
     - type: titled
       preactions:
       - $cmd:set-scene-data:this:isShowDima:true$
       - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
       - $cmd:wait:1$
       actions:
-      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$
+      - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
+      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
       postactions:
       - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-upset.png$
         - $cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-upset.png$
-      title: Дима
+      title: '???'
       text: JAVAAAAAAA!!!!
       duration: 2
+
     - type: titled
       postactions:
       - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$
@@ -150,8 +172,14 @@ game-start:
       - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
       - $cmd:set-scene-data:this:isShowDima:false$
       title: Наташа и Хлоя
-      text: ($cmd:get-global-data:playerName$), не обращай внимания он джавист, а они странные!
+      text: ($cmd:get-global-data:playerName$), не обращай внимания, это Дима - джавист!
       duration: 2
+    
+    - type: titled
+      title: Хлоя
+      text: Он получил контузию в битве у Верхнего Ларса, у него был серьезнывй приход... прости я имела ввиду прелет...
+      duration: 2
+
     - type: titled
       postactions:
       - - $cmd:play-animation-on:chloe:lightSpeedOutRight:1:1:chloe-animation$
@@ -159,8 +187,9 @@ game-start:
       - - $cmd:set-scene-data:this:isShowChloe:false$
         - $cmd:set-scene-data:this:isShowNata:false$
       title: Наташа и Хлоя
-      text: Ладно, пока!
+      text: Ладно, пока, заходи в гости!
       duration: 2
+
     choice-room:
     - text: Куда пойти?
       options:

@@ -45,4 +45,12 @@ export const commands = {
         });
         resolver('show-scene-title');
     },
+    'get-random-int': (from, to, pid, resolver) => {
+        const value = Math.floor((Math.random() * to - from) + from);
+        resolver(value);
+    },
+    'get-random-float': (from, to, pid, resolver) => {
+        const vallue = (Math.random() * to - from) + from;
+        resolver(value);
+    },
 }

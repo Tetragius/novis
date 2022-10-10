@@ -73,12 +73,10 @@ export default class InventoryPlugin {
                         ...(preactions ?? []),
                         [
                             ...(actions ?? []),
-                            [
-                                constructCommand(type, title, text),
-                                ...(postactions ?? []),
-                            ]
+                            constructCommand(type, title, text),
                         ],
-                        `$cmd:wait:${duration}$`
+                        `$cmd:wait:${duration}$`,
+                        ...(postactions ?? []),
                     ];
 
                     DIALOGS[type].element.conditional = true;

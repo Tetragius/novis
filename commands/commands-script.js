@@ -1,4 +1,4 @@
-import { CommandManager } from "../services/commandManager.js";
+import { CommandManager, AsyncFunction } from "../services/commandManager.js";
 import { DataManager } from "../services/dataManager.js";
 import { SceneManager } from '../services/sceneManager.js';
 
@@ -15,16 +15,16 @@ export const commands = {
         await CommandManager.killProcess(pid);
         resolver('kill-this-script');
     },
-    'eval': (code, _, resolver) => {
-        eval(code);
-        resolver('eval');
+    'eval': async (code, _, resolver, ...prevStepReturns) => {
+        const result = await(new AsyncFunction('prevStepReturns', code))(prevStepReturns);
+        resolver(result);
     },
-    'wait': (seconds, pid, resolver) => {
-        const foo = () => DataManager.global.isSkipMode && resolver('wait');
+    'wait': (seconds, pid, resolver, ...prevStepReturns) => {
+        const foo = () => DataManager.global.isSkipMode && resolver(prevStepReturns);
         DataManager.addEventListener('change', foo);
         const timer = setTimeout(() => {
             DataManager.removeEventListener('change', foo);
-            resolver('wait');
+            resolver(prevStepReturns);
         }, Number(seconds * 1000))
     },
     'set-temp-value': (name, value, pid, resolver) => {

@@ -21,7 +21,8 @@ export class SystemDialog extends GameElement {
         width: 100%; 
         height: 100%; 
         padding: 24px; 
-        box-sizing: border-box;
+        box-sizing: border-box;    
+        overflow-y: auto;
     }
 `;
     template = `
