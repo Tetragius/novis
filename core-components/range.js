@@ -1,4 +1,5 @@
-import { GameElement } from "../core-components/element.js";
+import { CommandManager } from "../services/commandManager.js";
+import { GameElement } from "./element.js";
 
 export class Range extends GameElement {
 
@@ -6,7 +7,21 @@ export class Range extends GameElement {
         super();
     }
 
-    value = () => this.hasAttribute('$value') ? eval(this.getAttribute('$value')) : this.getAttribute('value') ?? 0;
+    async connectedCallback() {
+        super.connectedCallback();
+        const value = parseFloat(await CommandManager.runCommands([this.getAttribute('value')])) ?? 0;
+        if (this.shadowRoot.children[1]) {
+            this.shadowRoot.children[1].value = value;
+            this.shadowRoot.children[1].oninput = this.changeHandler;
+        }
+    }
+
+    changeHandler = async (e) => {
+        if (this.hasAttribute('onchange')) {
+            const action = this.getAttribute('onchange');
+            await CommandManager.runCommands(action.split(','), null, e.target.value);
+        }
+    }
 
     _css = `
         :host {
@@ -17,9 +32,7 @@ export class Range extends GameElement {
             width: 100%;
         }`;
 
-    template = `<input type="range" min="${this.getAttribute('min')}" max="${this.getAttribute('max')}" step="${this.getAttribute('step')}"
-    value="${this.value()}"
-    oninput="${this.getAttribute('onchange')}" />`
+    template = `<input type="range" min="${this.getAttribute('min')}" max="${this.getAttribute('max')}" step="${this.getAttribute('step')}"/>`
 
 }
 

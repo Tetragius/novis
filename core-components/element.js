@@ -17,6 +17,9 @@ export class GameElement extends HTMLElement {
         this.addEventListener('mount', () => this.onmount?.());
 
         this.checkConditional();
+
+        this.constructor._instanses = this.constructor._instanses ?? new WeakMap();
+        this.constructor._instanses.set(this, this);
     }
 
     get css() {

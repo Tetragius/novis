@@ -2,6 +2,7 @@ export class SFX extends EventTarget {
     constructor() {
         super();
         this.gain.connect(this.context.destination);
+        this.gain.gain.value = this.#volume;
     }
 
     nodes = [];
@@ -17,7 +18,7 @@ export class SFX extends EventTarget {
         return this.#gain;
     }
 
-    #volume = 1;
+    #volume = 0.8;
     get volume() {
         return this.gain.gain.value;
     }

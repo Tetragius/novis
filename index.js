@@ -2,7 +2,6 @@ import './services/sceneManager.js';
 import './services/dataManager.js';
 import './services/animationManager.js';
 import './services/commandManager.js';
-import './services/sfxManager.js';
 import './services/pluginManager.js';
 import { GameManager } from './services/gameManager.js';
 
@@ -29,12 +28,14 @@ GameManager.load(
         '/commands/commands-script.js',
         '/commands/commands-animation.js',
         '/commands/commands-data.js',
-        '/commands/commands-sound.js',
     ],
     [
-        '/plugins/plugin-inventory.js',
-        '/plugins/plugin-dialog.js',
-        '/plugins/plugin-dialog-history.js'
+        'plugin-inventory',
+        'plugin-dialog',
+        'plugin-dialog-history',
+        'plugin-sfx',
+        { name: 'plugin-actor', actors: ['dima', 'chloe', 'nata'] },
+        'plugin-url'
     ],
     [
         '/core-components/element.js',

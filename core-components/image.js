@@ -58,6 +58,8 @@ export class Image extends GameElement {
         clear: both;
     }`;
 
+    template = '<slot></slot>'
+
 }
 
 customElements.define('g-image', Image);

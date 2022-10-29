@@ -124,8 +124,8 @@ export class Interpretator extends EventTarget {
         });
     }
 
-    async runCommands(commands, pid) {
-        return Promise.all(commands.map(command => this.runCommand(command, pid)));
+    async runCommands(commands, pid, attrs) {
+        return Promise.all(commands.map(command => this.runCommand(command, pid, attrs)));
     }
 
     async checkConditional(conditional, pid) {

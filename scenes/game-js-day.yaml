@@ -15,30 +15,6 @@ game-js-day:
           src: /img/js-day.jpg
           w: 1024px
           h: 768px
-    # Cлой с Наташей
-    - name: g-layer
-      attrs:
-        id: nata
-        conditional: $cmd:get-scene-data:this:isShowNata$
-      children:
-      - name: g-image
-        attrs:
-          src: /img/fm01/fm01-body.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/fm01/fm01-eyes-soft.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/fm01/fm01-mouth-soft01.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
     # Слой с мини-игрой
     - name: g-layer
       children:
@@ -107,7 +83,6 @@ game-js-day:
       - $cmd:set-scene:win$
   # Данные
   data:
-    isShowNata: false
     isShowTitle: false
     isStartClickGame: false
     count: 0
@@ -117,8 +92,8 @@ game-js-day:
     - conditional: 'true'
       steps:
       - $cmd:fadeIn:1$
-      - - $cmd:sfx-background:/sfx/Sunset.mp3$
-        - $cmd:sfx-in$
+      - - $cmd:pg-sfx-background:/sfx/Sunset.mp3$
+        - $cmd:pg-sfx-in$
 
       - $cmd:set-scene-data:this:isShowTitle:true$
       - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
@@ -128,7 +103,7 @@ game-js-day:
       - $cmd:set-scene-data:this:isShowTitle:false$
       - $cmd:wait:1$
       
-      - $cmd:set-scene-data:this:isShowNata:true$
+      - $cmd:pg-actor-show:nata:soft:0:48px$
       - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
 
       - $cmd:pg-dialog-play:base$ 
@@ -137,9 +112,9 @@ game-js-day:
     - conditional: 'true'
       steps:
       - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-      - $cmd:set-scene-data:this:isShowNata:false$
+      - $cmd:pg-actor-remove:nata$
 
-      - $cmd:sfx-out$
+      - $cmd:pg-sfx-out$
       - $cmd:fadeOut:1$
     to-hall:
     - conditional: 'true'
@@ -152,7 +127,7 @@ game-js-day:
       - $cmd:pg-dialog-play:game$ 
 
       - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-      - $cmd:set-scene-data:this:isShowNata:false$
+      - $cmd:pg-actor-remove:nata$
 
       - $cmd:set-scene-data:this:isStartClickGame:true$
       - conditional: $cmd:get-scene-data:this:count$ === 3
@@ -160,7 +135,7 @@ game-js-day:
         steps:
         - $cmd:set-scene-data:this:isStartClickGame:false$
 
-        - $cmd:set-scene-data:this:isShowNata:true$
+        - $cmd:pg-actor-show:nata:soft:0:48px$
         - $cmd:play-animation-on:nata:blurIn:1:1:nata-animation$
         
         - $cmd:pg-dialog-play:game$ 

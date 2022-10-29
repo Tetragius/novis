@@ -5,6 +5,15 @@ import { AnimationManager } from './animationManager.js'
 import { SceneManager } from './sceneManager.js';
 import { GameElement } from "../core-components/element.js";
 
+const fetcher = async (pluginName) => {
+    const response = await fetch(`/plugins/${pluginName}.js`);
+    if (response.status == 200) {
+        return await import(`/plugins/${pluginName}.js`);
+    } else if (response.status === 404) {
+        return await import(`/plugins/${pluginName}/index.js`);
+    }
+}
+
 export class Plugins extends EventTarget {
     constructor() {
         super();
@@ -18,8 +27,14 @@ export class Plugins extends EventTarget {
      * @return {Promise<boolean>} 
      * @memberof Plugins
      */
-    async definePlugin(src) {
-        const module = await import(src);
+    async definePlugin(plugin) {
+        let module;
+        if (typeof plugin === 'string') {
+            module = await fetcher(plugin);
+        }
+        else {
+            module = await fetcher(plugin.name);
+        }
         this.plugins = {
             ...this.plugins,
             [module.name]: new module.default({
@@ -30,7 +45,7 @@ export class Plugins extends EventTarget {
                 SceneManager,
                 PluginManager: this,
                 GameElement
-            })
+            }, plugin)
         };
         return true;
     }

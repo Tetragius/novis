@@ -4,6 +4,11 @@ export class Layer extends GameElement {
 
     constructor() {
         super(true);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
         this.style.display = 'contents';
         this.style.position = 'absolute';
         this.style.top = '0';

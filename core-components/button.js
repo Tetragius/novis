@@ -1,13 +1,11 @@
 import { CommandManager } from "../services/commandManager.js";
-import { SFXManager } from "../services/sfxManager.js";
 import { GameElement } from "./element.js";
 
 export class Button extends GameElement {
 
-
     constructor() {
         super();
-        this.addEventListener('click', () => SFXManager.sound('/sfx/click.wav'));
+        this.addEventListener('click', () => Button.staticActions());
         this.addEventListener('click', this.doAction);
         this.addEventListener('actioncomplete', () => this.onactioncomplete?.());
     }
@@ -29,6 +27,8 @@ export class Button extends GameElement {
         this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : '';
         this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : '';
     }
+
+    static staticActions = () => { }
 
     _css = `
         :host{

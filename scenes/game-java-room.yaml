@@ -15,30 +15,6 @@ game-java-room:
           src: /img/java-room.jpg
           w: 1024px
           h: 768px
-    # Cлой с Димой
-    - name: g-layer
-      attrs:
-        id: dima
-        conditional: $cmd:get-scene-data:this:isShowDima$
-      children:
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-body.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-eyes-smile.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-mouth-smile00.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
     # Cлой с названием сцены
     - name: g-title
       attrs:
@@ -54,14 +30,14 @@ game-java-room:
       conditional: $cmd:get-temp-value:d$ === 1 # Читаем переменную "d"
       actions:
       - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
-      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
+      - $cmd:pg-sfx-play-parallel:/sfx/dima-laugh.wav$
     
     - title: Дима
       text: Java? Java, java jaaava ja va! Ja va? Java!?  
       conditional: $cmd:get-temp-value:d$ === 2 # Читаем переменную "d"
       actions:
       - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
-      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$  
+      - $cmd:pg-sfx-play-parallel:/sfx/dima-laugh.wav$  
       duration: 2
 
     - title: Дима
@@ -69,7 +45,7 @@ game-java-room:
       conditional: $cmd:get-temp-value:d$ === 3 # Читаем переменную "d"
       actions:
       - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
-      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
+      - $cmd:pg-sfx-play-parallel:/sfx/dima-laugh.wav$
 
     - title: Дима
       text: Java? Изолента... она напоменает мне о друге, он... *всхлипывет* потерял в бою матируещие салфетки..., и еще о друге мне напоминаешь ты...
@@ -77,7 +53,7 @@ game-java-room:
       duration: 7
       actions:
       - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
-      - $cmd:sfx-play-parallel:/sfx/helicopter.mp3$
+      - $cmd:pg-sfx-play-parallel:/sfx/helicopter.mp3$
       postactions:
       - $cmd:run-script:loose$
       - $cmd:kill-this-script$
@@ -89,7 +65,6 @@ game-java-room:
           action: $cmd:run-script:to-hall$
   # Данные
   data:
-    isShowDima: false
     isShowTitle: false
   # Скрипты
   scripts:
@@ -97,8 +72,8 @@ game-java-room:
     - conditional: 'true'
       steps:
       - $cmd:fadeIn:1$
-      - - $cmd:sfx-background:/sfx/alexander-nakarada-silly-intro.mp3$
-        - $cmd:sfx-in$
+      - - $cmd:pg-sfx-background:/sfx/alexander-nakarada-silly-intro.mp3$
+        - $cmd:pg-sfx-in$
 
       - $cmd:set-scene-data:this:isShowTitle:true$
       - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
@@ -108,7 +83,7 @@ game-java-room:
       - $cmd:set-scene-data:this:isShowTitle:false$
       - $cmd:wait:1$
 
-      - $cmd:set-scene-data:this:isShowDima:true$
+      - $cmd:pg-actor-show:dima:smile:0:48px$
       - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
 
       - $cmd:get-random-int:1:3$ # Получаем случайное целое число от 1 до 3
@@ -119,9 +94,9 @@ game-java-room:
     - conditional: 'true'
       steps:
       - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
-      - $cmd:set-scene-data:this:isShowDima:false$
+      - $cmd:pg-actor-remove:dima$
 
-      - $cmd:sfx-out$
+      - $cmd:pg-sfx-out$
       - $cmd:fadeOut:1$
     to-hall:
     - conditional: 'true'

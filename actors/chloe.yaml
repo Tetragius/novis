@@ -1,0 +1,48 @@
+body:
+  w: 400px
+  aspect-ratio: 1200/2160   
+  src: /img/fm02/fm02-body.png
+
+smile:
+  parts:
+    eyes:
+      w: 400px
+      aspect-ratio: 1200/2160   
+      src: /img/fm02/fm02-eyes-smile.png
+    mouth:
+      w: 400px
+      aspect-ratio: 1200/2160 
+      src: /img/fm02/fm02-mouth-smile01.png
+
+nervous:
+  parts:
+    eyes:
+      w: 400px
+      aspect-ratio: 1200/2160
+      src: /img/fm02/fm02-eyes-nervous.png
+    mouth:
+      w: 400px
+      aspect-ratio: 1200/2160   
+      src: /img/fm02/fm02-mouth-nervous01.png
+
+upset:
+  parts:
+    eyes:
+      w: 400px
+      aspect-ratio: 1200/2160   
+      src: /img/fm02/fm02-eyes-upset.png
+    mouth:
+      w: 400px
+      aspect-ratio: 1200/2160   
+      src: /img/fm02/fm02-mouth-upset01.png
+
+wow:
+  parts:
+    eyes:
+      w: 400px
+      aspect-ratio: 1200/2160  
+      src: /img/fm02/fm02-eyes-wow.png
+    mouth:
+      w: 400px
+      aspect-ratio: 1200/2160   
+      src: /img/fm02/fm02-mouth-wow01.png

@@ -80,7 +80,9 @@ export default class InventoryPlugin {
         button.innerHTML = 'Инвентарь';
 
         this.gm.bottomGroupRef.append(button);
-        this.gm.menuGroupRef.append(button.cloneNode(true));
+        const menuButton = button.cloneNode(true);
+        menuButton.onclick = button.onclick;
+        this.gm.menuGroupRef.append(menuButton);
     };
 
     keyDownHandler = (e) => {

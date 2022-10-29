@@ -16,86 +16,6 @@ game-start:
           src: /img/hall.jpg
           w: 1024px
           h: 768px
-    # Cлой с наташей
-    - name: g-layer
-      attrs:
-        id: nata
-        conditional: $cmd:get-scene-data:this:isShowNata$
-      children:
-      - name: g-image
-        attrs:
-          src: /img/fm01/fm01-body.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160      
-      - name: g-image
-        attrs:
-          id: eyes
-          src: /img/fm01/fm01-eyes-soft.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/fm01/fm01-mouth-soft01.png
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-    # Cлой с Хлоей
-    - name: g-layer
-      attrs:
-        id: chloe
-        conditional: $cmd:get-scene-data:this:isShowChloe$
-      children:
-      - name: g-image
-        attrs:
-          src: /img/fm02/fm02-body.png
-          x: 620px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          id: eyes_c
-          src: /img/fm02/fm02-eyes-smile.png
-          x: 620px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/fm02/fm02-mouth-smile00.png
-          x: 620px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-    # Cлой с Димой
-    - name: g-layer
-      attrs:
-        id: dima
-        conditional: $cmd:get-scene-data:this:isShowDima$
-      children:
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-body.png
-          x: 318px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-eyes-smile.png
-          x: 318px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
-      - name: g-image
-        attrs:
-          src: /img/m01/m01-mouth-smile00.png
-          x: 318px
-          y: 48px
-          w: 400px
-          aspect-ratio: 1200/2160
     # Cлой с названием сцены
     - name: g-title
       attrs:
@@ -112,7 +32,7 @@ game-start:
 
     - type: titled
       preactions:
-      - $cmd:set-scene-data:this:isShowNata:true$
+      - $cmd:pg-actor-show:nata:soft:0:48px$
       - $cmd:play-animation-on:nata:lightSpeedInLeft:1:1:nata-animation$
       - $cmd:wait:1$
       title: '???'
@@ -135,8 +55,8 @@ game-start:
       duration: 2
 
     - type: titled
-      preactions:
-      - $cmd:set-scene-data:this:isShowChloe:true$
+      preactions:      
+      - $cmd:pg-actor-show:chloe:smile:620px:48px$
       - $cmd:play-animation-on:chloe:lightSpeedInRight:1:1:chloe-animation$
       - $cmd:wait:1$
       title: '???'
@@ -152,25 +72,26 @@ game-start:
 
     - type: titled
       preactions:
-      - $cmd:set-scene-data:this:isShowDima:true$
+      - $cmd:pg-actor-show:dima:smile:318px:48px$
       - $cmd:play-animation-on:dima:blurIn:1:1:dima-animation$
       - $cmd:wait:1$
       actions:
       - $cmd:play-animation-on:dima:shakeX:0.5:1:dima-animation$      
-      - $cmd:sfx-play-parallel:/sfx/dima-laugh.wav$
+      - $cmd:pg-sfx-play-parallel:/sfx/dima-laugh.wav$        
+      - $cmd:pg-actor-change:dima:grin$
       postactions:
-      - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-upset.png$
-        - $cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-upset.png$
+      - - $cmd:pg-actor-change:nata:upset$
+        - $cmd:pg-actor-change:chloe:upset$
       title: '???'
       text: JAVAAAAAAA!!!!
       duration: 2
 
     - type: titled
       postactions:
-      - - $cmd:change-attr:eyes:src,/img/fm01/fm01-eyes-smile.png$
-        - $cmd:change-attr:eyes_c:src,/img/fm02/fm02-eyes-smile.png$
+      - - $cmd:pg-actor-change:nata:smile$
+        - $cmd:pg-actor-change:chloe:smile$
       - $cmd:play-animation-on:dima:blurOut:1:1:dima-animation$
-      - $cmd:set-scene-data:this:isShowDima:false$
+      - $cmd:pg-actor-remove:dima$
       title: Наташа и Хлоя
       text: ($cmd:get-global-data:playerName$), не обращай внимания, это Дима - джавист!
       duration: 2
@@ -184,8 +105,8 @@ game-start:
       postactions:
       - - $cmd:play-animation-on:chloe:lightSpeedOutRight:1:1:chloe-animation$
         - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
-      - - $cmd:set-scene-data:this:isShowChloe:false$
-        - $cmd:set-scene-data:this:isShowNata:false$
+      - - $cmd:pg-actor-remove:chloe$
+        - $cmd:pg-actor-remove:nata$
       title: Наташа и Хлоя
       text: Ладно, пока, заходи в гости!
       duration: 2
@@ -211,9 +132,6 @@ game-start:
   data:
     isNight: false
     isFirstTime: true
-    isShowNata: false
-    isShowChloe: false
-    isShowDima: false
     isShowTitle: false
   # Скрипты
   scripts:
@@ -222,8 +140,8 @@ game-start:
       steps:
       - $cmd:fadeIn:1$
 
-      - $cmd:sfx-background:/sfx/Sneaky-Snitch.mp3$
-      - $cmd:sfx-in$
+      - $cmd:pg-sfx-background:/sfx/Sneaky-Snitch.mp3$
+      - $cmd:pg-sfx-in$
 
       - $cmd:set-scene-data:this:isShowTitle:true$
       - $cmd:play-animation-on:title:lightSpeedInLeft:2:1:title-animation$
@@ -242,7 +160,7 @@ game-start:
     onOut:
     - conditional: true
       steps:
-      - $cmd:sfx-out$
+      - $cmd:pg-sfx-out$
       - $cmd:fadeOut:1$
     to-day:
     - conditional: true
