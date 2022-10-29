@@ -4,7 +4,7 @@ import { AnimationManager } from "../services/animationManager.js";
 const traverse = (element) => {
     const isWrapper = window.getComputedStyle(element)?.display === 'contents';
     if (isWrapper) {
-        return [...(element.shadowRoot ?? element).querySelectorAll(':scope > :not(style)')].map(traverse).flat();
+        return [...(element.shadowRoot ?? element).querySelectorAll(':host > :not(style), :scope > :not(style)')].map(traverse).flat();
     }
     return [element];
 }
