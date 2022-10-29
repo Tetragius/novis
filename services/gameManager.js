@@ -44,18 +44,34 @@ export class Manager extends EventTarget {
                 case 27: // Escape
                     if (DataManager.global.sysDialogName) {
                         DataManager.setGlobalData('sysDialogName', '');
+                        this.dispatchEvent(new CustomEvent('continue'));
                         return;
                     }
-                    DataManager.setGlobalData('isPaused', false)
-                    DataManager.setGlobalData('isShowMenu', !DataManager.global.isShowMenu);
-                    return;
-                case 67:
-                    DataManager.setGlobalData('isShowMenu', false);
-                    DataManager.setGlobalData('sysDialogName', 'config');
+
+                    if (DataManager.global.isShowMenu) {
+                        DataManager.setGlobalData('isShowMenu', false);
+                        this.dispatchEvent(new CustomEvent('continue'));
+                        return;
+                    }
+                    else {
+                        DataManager.setGlobalData('isShowMenu', true);
+                        this.dispatchEvent(new CustomEvent('pause'));
+                    }
+
+                    if (DataManager.global.isPaused) {
+                        DataManager.setGlobalData('isPaused', false)
+                        this.dispatchEvent(new CustomEvent('continue'));
+                    }
+
                     return;
                 case 80:
-                    if (!DataManager.global.sysDialogName && !DataManager.global.isShowMenu) {
+                    if (!DataManager.global.sysDialogName && !DataManager.global.isShowMenu && !DataManager.global.isPaused) {
+                        this.dispatchEvent(new CustomEvent('pause'));
                         DataManager.setGlobalData('isPaused', true);
+                    }
+                    else if (DataManager.global.isPaused) {
+                        DataManager.setGlobalData('isPaused', false)
+                        this.dispatchEvent(new CustomEvent('continue'));
                     }
                     return;
                 default:
@@ -90,7 +106,7 @@ export class Manager extends EventTarget {
     async initialScene() {
         DataManager.setGlobalData('isStarted', false);
         DataManager.setGlobalData('isShowMenu', false);
-        await SceneManager.goToInitial();   
+        await SceneManager.goToInitial();
         DataManager.setGlobalData('isShowMenu', true);
     }
     /**

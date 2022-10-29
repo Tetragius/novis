@@ -1,3 +1,5 @@
+import { GameManager } from "./gameManager.js";
+
 export class Animate extends EventTarget {
     constructor() {
         super();
@@ -37,9 +39,21 @@ export class Animate extends EventTarget {
                 { ...animationData.config, ...overrideConfig }
             );
             const animation = new Animation(keyframes, document.timeline);
-            animation.play();
+
+            const pauseHandler = () => animation.pause();
+            const continueHandler = () => animation.play();
+
+            animation.play();           
+
+            GameManager.addEventListener('pause', pauseHandler);
+            GameManager.addEventListener('continue', continueHandler);
+
             animation.onfinish = resolver;
             await promise;
+                       
+            GameManager.removeEventListener('pause', pauseHandler);
+            GameManager.removeEventListener('continue', continueHandler);
+
             animation.persist();
         }
         return;
