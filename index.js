@@ -35,7 +35,6 @@ GameManager.load(
         'plugin-dialog-history',
         'plugin-sfx',
         { name: 'plugin-actor', actors: ['dima', 'chloe', 'nata'] },
-        'plugin-url'
     ],
     [
         '/core-components/element.js',
