@@ -91,9 +91,9 @@ export default class InventoryPlugin {
                             ...(actions ?? []),
                             constructCommand(type, title, text),
                         ],
-                        `$cmd:wait:${duration}$`,
+                        type === 'input' ? false : `$cmd:wait:${duration}$`,
                         ...(postactions ?? []),
-                    ];
+                    ].filter(Boolean);
 
                     DIALOGS[type].element.conditional = true;
                     await this.cm.evalCommandChain([...script], pid);
