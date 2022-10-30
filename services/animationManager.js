@@ -36,21 +36,21 @@ export class Animate extends EventTarget {
             const keyframes = new KeyframeEffect(
                 target,
                 animationData.animation,
-                { ...animationData.config, ...overrideConfig }
+                { composite: "add", duration: 200, ...animationData.config, ...overrideConfig }
             );
             const animation = new Animation(keyframes, document.timeline);
 
             const pauseHandler = () => animation.pause();
             const continueHandler = () => animation.play();
 
-            animation.play();           
+            animation.play();
 
             GameManager.addEventListener('pause', pauseHandler);
             GameManager.addEventListener('continue', continueHandler);
 
             animation.onfinish = resolver;
             await promise;
-                       
+
             GameManager.removeEventListener('pause', pauseHandler);
             GameManager.removeEventListener('continue', continueHandler);
 

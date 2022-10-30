@@ -4,6 +4,10 @@ export class Filter extends GameElement {
 
     constructor() {
         super(true);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
         this.style.display = 'contents';
     }
 

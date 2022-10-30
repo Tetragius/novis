@@ -104,7 +104,7 @@ game-start:
     - type: titled
       postactions:
       - - $cmd:play-animation-on:chloe:lightSpeedOutRight:1:1:chloe-animation$
-        - $cmd:play-animation-on:nata:blurOut:1:1:nata-animation$
+        - $cmd:play-animation-on:nata:lightSpeedOutLeft:1:1:nata-animation$
       - - $cmd:pg-actor-remove:chloe$
         - $cmd:pg-actor-remove:nata$
       title: Наташа и Хлоя

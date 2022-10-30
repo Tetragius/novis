@@ -4,6 +4,10 @@ export class Transform extends GameElement {
 
     constructor() {
         super();
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
         this.style.display = 'contents';
     }
 

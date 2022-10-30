@@ -5,10 +5,6 @@
                 "rotate(0deg)",
                 "rotate(360deg)"
             ]
-        },
-        "config": {
-            "duration": 4000,
-            "iterations": "Infinity"
         }
     }
 }

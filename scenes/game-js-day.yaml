@@ -22,6 +22,8 @@ game-js-day:
         attrs:
           conditional: $cmd:get-scene-data:this:isStartClickGame$
           name: rotate
+          iterations: Infinity
+          duration: 8000
         children:
         - name: g-image
           attrs:

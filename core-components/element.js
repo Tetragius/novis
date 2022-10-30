@@ -48,6 +48,19 @@ export class GameElement extends HTMLElement {
 
     get conditional() { return this.getAttribute('conditional'); }
 
+    get isHide() {
+        return (() => new Promise(resolve => {
+            const foo = () => {
+                this.removeEventListener('hide', foo);
+                resolve(true);
+            };
+            this.addEventListener('hide', foo);
+            if (this.placeholder) {
+                foo();
+            }
+        }))();
+    }
+
     #observer = null;
     onunmount = null;
     onmount = null;
@@ -55,7 +68,7 @@ export class GameElement extends HTMLElement {
     connectedCallback() {
         this.isMounted = true;
         !this.noShadow && (this.shadowRoot.innerHTML = `${this.css}${this.template}`);
-        this.#observer = new MutationObserver(this.update.bind(this.shadowRoot ?? this));
+        this.#observer = new MutationObserver(this.update.bind(this));
         this.#observer.observe(this, { childList: true });
         this.update();
         this.dispatchEvent(new CustomEvent('mount'));
@@ -91,6 +104,10 @@ export class GameElement extends HTMLElement {
         }
     }
 
+    async beforeHide() {
+        return true;
+    }
+
     checkConditional = async () => {
         const conditional = this.getAttribute('conditional');
         if (!conditional) return;
@@ -98,6 +115,8 @@ export class GameElement extends HTMLElement {
         if (!result && !this.placeholder) {
             this.placeholder = new Comment(this.id);
             this.placeholder.$element = this;
+            await this.beforeHide();
+            this.dispatchEvent(new CustomEvent('hide'));
             this.parentNode.replaceChild(this.placeholder, this);
         }
         if (result && this.placeholder) {

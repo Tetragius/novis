@@ -45,7 +45,7 @@
             "composite": "add"
         }
     },
-    "lightSpeedOutLeft ": {
+    "lightSpeedOutLeft": {
         "animation": {
             "filter": [
                 "opacity(1)",

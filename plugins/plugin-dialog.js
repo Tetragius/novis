@@ -52,11 +52,19 @@ export default class InventoryPlugin {
 
     postLoad = async () => {
         const dialogsEl = Object.entries(DIALOGS).map(([key, data]) => {
+
+            const animate = document.createElement('g-animate');
+            animate.setAttribute('name', 'zoomIn');
+            animate.setAttribute('backName', 'jello');
+
             const dialog = document.createElement(data.tag);
             dialog.id = data.id;
             dialog.conditional = false;
             data.element = dialog;
-            return dialog;
+
+            animate.append(dialog);
+
+            return animate;
         });
         this.gm.entryRef.after(...dialogsEl);
         return true;
@@ -66,8 +74,15 @@ export default class InventoryPlugin {
         'pg-dialog-play': async (id, pid, resolver) => {
             const messages = this.sm.currentScene.dialogs[id];
 
+            let oldType = 'dialog';
+
             for (const message of messages) {
                 const { type = 'dialog', conditional = true, duration = 1, preactions, actions, postactions, title, text, options } = message;
+
+                if (type !== oldType) {
+                    DIALOGS[oldType].element.conditional = false;
+                    await DIALOGS[oldType].element.isHide;
+                }
 
                 if (await this.cm.checkConditional(conditional, pid)) {
                     const script = [
@@ -102,11 +117,14 @@ export default class InventoryPlugin {
                         });
 
                         DIALOGS.menu.element.conditional = false;
+                        await DIALOGS.menu.element.isHide;
                     }
-
-                    DIALOGS[type].element.conditional = false;
+                    oldType = type;
                 }
             }
+
+            DIALOGS[oldType].element.conditional = false;
+            await DIALOGS[oldType].element.isHide;
 
             resolver('pg-dialog-play');
         },
