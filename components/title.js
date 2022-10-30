@@ -21,7 +21,7 @@ export class Title extends GameElement {
         top: 148px; 
         font-size: 72pt;
         color: white;
-        z-index: 3;
+        z-index: 2;
     }
 `;
 

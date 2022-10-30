@@ -19,9 +19,11 @@
         <div id="g-entry"></div>
         <!--ENTRYPOINT-->
         <!--SYSTEM-->
-        <g-filter backdrop name="sepia" value="100">
+        <g-filter backdrop name="grayscale" value="100">
             <g-filter backdrop name="blur" value="10">
-                <g-layer>
+                <g-layer wrap
+                    conditional="$gameData.global.isShowMenu || $gameData.global.isPaused || $gameData.global.sysDialogName">
+                    <g-title>Супер Игра</g-title>
                     <!--MENU-->
                     <g-dialog-menu conditional="$gameData.global.isShowMenu" x="50" y="50">
                         <g-group id="menu-group">
@@ -46,14 +48,16 @@
                         <div id="settings-block"></div>
                     </g-dialog-system>
                     <!--CONFIG-->
-                    <!--BOTTOM-->
-                    <div id="bottom" is="g-div" conditional="$gameData.global.isStarted">
-                        <g-group id="bottom-group" horizontal></g-group>
-                    </div>
-                    <!--BOTTOM-->
                 </g-layer>
             </g-filter>
         </g-filter>
+        <g-layer z="4">
+            <!--BOTTOM-->
+            <div id="bottom" is="g-div" conditional="$gameData.global.isStarted">
+                <g-group id="bottom-group" horizontal></g-group>
+            </div>
+            <!--BOTTOM-->
+        </g-layer>
         <!--SYSTEM-->
     </g-game>
 </body>

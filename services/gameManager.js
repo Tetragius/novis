@@ -25,8 +25,8 @@ export class Manager extends EventTarget {
 
     keyUpHandler(e) {
         if (DataManager.global.isStarted) {
-            switch (e.key.toUpperCase()) {
-                case 'CONTROL':
+            switch (e.keyCode) {
+                case 17: // Control
                     DataManager.setGlobalData('isSkipMode', false);
                     return;
                 default:
@@ -42,6 +42,13 @@ export class Manager extends EventTarget {
                     DataManager.setGlobalData('isSkipMode', true);
                     return;
                 case 27: // Escape
+
+                    if (DataManager.global.isPaused) {
+                        DataManager.setGlobalData('isPaused', false);
+                        this.dispatchEvent(new CustomEvent('continue'));
+                        return;
+                    }
+
                     if (DataManager.global.sysDialogName) {
                         DataManager.setGlobalData('sysDialogName', '');
                         this.dispatchEvent(new CustomEvent('continue'));
@@ -56,11 +63,6 @@ export class Manager extends EventTarget {
                     else {
                         DataManager.setGlobalData('isShowMenu', true);
                         this.dispatchEvent(new CustomEvent('pause'));
-                    }
-
-                    if (DataManager.global.isPaused) {
-                        DataManager.setGlobalData('isPaused', false)
-                        this.dispatchEvent(new CustomEvent('continue'));
                     }
 
                     return;

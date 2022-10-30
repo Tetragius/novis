@@ -9,9 +9,10 @@ export class DialogInput extends GameElement {
     connectedCallback() {
         super.connectedCallback();
         this.shadowRoot.querySelector('g-input')
-            ?.addEventListener('keydown', ({ key, target }) => {
-                if (key === 'Enter') {
-                    this.dispatchEvent(new CustomEvent('submit', { detail: target.value }));
+            ?.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+                if (event.key === 'Enter') {
+                    this.dispatchEvent(new CustomEvent('submit', { detail: event.target.value }));
                 }
             })
     }

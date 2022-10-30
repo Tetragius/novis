@@ -73,10 +73,19 @@ export default class DialogHistoryPlugin {
         this.gm.settingsBlockRef.after(layer);
     }
 
+    toggle = () => {
+        if (this.dm.global.sysDialogName) {
+            this.gm.dispatchEvent(new CustomEvent('continue'));
+            this.dm.setGlobalData('sysDialogName', '');
+            return;
+        }
+        this.gm.dispatchEvent(new CustomEvent('pause'));
+        this.dm.setGlobalData('sysDialogName', 'dialog-history');
+    }
 
     drawMenuButton = () => {
         const button = document.createElement('g-button');
-        button.onclick = () => this.dm.setGlobalData('sysDialogName', 'dialog-history');
+        button.onclick = () => this.toggle();
         button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
         button.innerHTML = 'История';
 
@@ -87,7 +96,7 @@ export default class DialogHistoryPlugin {
         if (this.dm.global.isStarted) {
             const keyCode = e.keyCode;
             if (keyCode === 72) {
-                this.dm.setGlobalData('sysDialogName', 'dialog-history');
+                this.toggle();
             }
         }
     }
