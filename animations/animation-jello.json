@@ -1,0 +1,30 @@
+{
+    "jello": {
+        "animation": {
+            "transform": [
+                "translate3d(0, 0, 0)",
+                "translate3d(0, 0, 0)",
+                "skewX(-12.5deg) skewY(-12.5deg)",
+                "skewX(6.25deg) skewY(6.25deg)",
+                "skewX(-3.125deg) skewY(-3.125deg)",
+                "skewX(1.5625deg) skewY(1.5625deg)",
+                "skewX(-0.78125deg) skewY(-0.78125deg)",
+                "skewX(0.390625deg) skewY(0.390625deg)",
+                "skewX(-0.1953125deg) skewY(-0.1953125deg)",
+                "translate3d(0, 0, 0)"
+            ],
+            "offset": [
+                0,
+                0.111,
+                0.222,
+                0.333,
+                0.444,
+                0.555,
+                0.666,
+                0.777,
+                0.888,
+                1
+            ]
+        }
+    }
+}

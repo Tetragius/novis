@@ -1,0 +1,78 @@
+{
+    "backOutDown": {
+        "animation": {
+            "opacity": [
+                "1",
+                "0.7",
+                "0.7"
+            ],
+            "transform": [
+                "scale(1)",
+                "translateY(0px) scale(0.7)",
+                "translateY(700px) scale(0.7)"
+            ],
+            "offset": [
+                0,
+                0.2,
+                1
+            ]
+        }
+    },
+    "backOutLeft": {
+        "animation": {
+            "opacity": [
+                "1",
+                "0.7",
+                "0.7"
+            ],
+            "transform": [
+                "scale(1)",
+                "translateX(0px) scale(0.7)",
+                "translateX(-2000px) scale(0.7)"
+            ],
+            "offset": [
+                0,
+                0.2,
+                1
+            ]
+        }
+    },
+    "backOutRight": {
+        "animation": {
+            "opacity": [
+                "1",
+                "0.7",
+                "0.7"
+            ],
+            "transform": [
+                "scale(1)",
+                "translateX(0px) scale(0.7)",
+                "translateX(2000px) scale(0.7)"
+            ],
+            "offset": [
+                0,
+                0.2,
+                1
+            ]
+        }
+    },
+    "backOutUp": {
+        "animation": {
+            "opacity": [
+                "1",
+                "0.7",
+                "0.7"
+            ],
+            "transform": [
+                "scale(1)",
+                "translateY(0px) scale(0.7)",
+                "translateY(-700px) scale(0.7)"
+            ],
+            "offset": [
+                0,
+                0.2,
+                1
+            ]
+        }
+    }
+}

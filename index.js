@@ -27,6 +27,11 @@ GameManager.load(
         '/animations/animation-pulse.json',
         '/animations/animation-rubberBand.json',
         '/animations/animation-swing.json',
+        '/animations/animation-tada.json',
+        '/animations/animation-wobble.json',
+        '/animations/animation-jello.json',
+        '/animations/animation-backEntrances.json',
+        '/animations/animation-backExits.json',
     ],
     [
         '/commands/commands-game.js',

@@ -1,0 +1,24 @@
+{
+    "wobble": {
+        "animation": {
+            "transform": [
+                "translate3d(0, 0, 0)",
+                "translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg)",
+                "translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg)",
+                "translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg)",
+                "translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg)",
+                "translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg)",
+                "translate3d(0, 0, 0)"
+            ],
+            "offset": [
+                0,
+                0.15,
+                0.30,
+                0.45,
+                0.60,
+                0.75,
+                1
+            ]
+        }
+    }
+}
