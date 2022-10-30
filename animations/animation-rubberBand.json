@@ -1,0 +1,24 @@
+{
+    "rubberBand": {
+        "animation": {
+            "transform": [
+                "scale3d(1, 1, 1)",
+                "scale3d(1.25, 0.75, 1)",
+                "scale3d(0.75, 1.25, 1)",
+                "transform: scale3d(1.15, 0.85, 1)",
+                "transform: scale3d(0.95, 1.05, 1)",
+                "scale3d(1.05, 0.95, 1)",
+                "scale3d(1, 1, 1)"
+            ],
+            "offset": [
+                0,
+                0.30,
+                0.40,
+                0.50,
+                0.65,
+                0.75,
+                1
+            ]
+        }
+    }
+}

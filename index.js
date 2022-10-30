@@ -22,6 +22,11 @@ GameManager.load(
         '/animations/animation-zoom.json',
         '/animations/animation-heartBeat.json',
         '/animations/animation-lightSpeed.json',
+        '/animations/animation-bounce.json',
+        '/animations/animation-flash.json',
+        '/animations/animation-pulse.json',
+        '/animations/animation-rubberBand.json',
+        '/animations/animation-swing.json',
     ],
     [
         '/commands/commands-game.js',
