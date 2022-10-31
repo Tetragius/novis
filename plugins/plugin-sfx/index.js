@@ -9,7 +9,7 @@ const defineComponents = (GameElement, DataManager, CommandManager) => {
         }
 
         template = `<g-layer>
-            <span style="display: flex; align-items: center;">Громкость: <g-range min="0" max="1"
+            <span style="display: flex; align-items: center;">Громкость: <g-range min="0.01" max="1"
                     step="0.01" value="$cmd:pg-sfx-volume$"
                     onchange="$cmd:pg-sfx-set-volume:{0}$"></g-range></span>
         </g-layer>`
