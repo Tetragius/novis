@@ -44,6 +44,7 @@ GameManager.load(
         'plugin-dialog',
         'plugin-dialog-history',
         'plugin-sfx',
+        'plugin-frame',
         { name: 'plugin-actor', actors: ['dima', 'chloe', 'nata'] },
     ],
     [
@@ -62,6 +63,7 @@ GameManager.load(
         '/core-components/animate.js',
         '/core-components/transform.js',
         '/core-components/div.js',
+        '/core-components/iframe.js',
         '/components/title.js',
         '/components/dialog.js',
         '/components/dialog-menu.js',

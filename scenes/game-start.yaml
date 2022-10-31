@@ -128,6 +128,9 @@ game-start:
       - conditional: "$cmd:get-scene-data:this:isNight$"
         text: Ждать до утра
         action: $cmd:run-script:to-day$
+      - conditional: true
+        text: Решить задачу
+        action: $cmd:run-script:task$
   # Данные
   data:
     isNight: false
@@ -193,3 +196,8 @@ game-start:
       steps:
       - $cmd:wait:1$
       - $cmd:set-scene:game-java-room$
+    task:
+    - conditional: true
+      steps:
+      - $cmd:pg-frame-show:https%3A//editor-dun.vercel.app/:white$
+      - $cmd:eval:console.log(prevStepReturns)$
