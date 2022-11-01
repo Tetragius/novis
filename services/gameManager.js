@@ -108,6 +108,7 @@ export class Manager extends EventTarget {
     async initialScene() {
         DataManager.setGlobalData('isStarted', false);
         DataManager.setGlobalData('isShowMenu', false);
+        await SceneManager.playSplashScenes();
         await SceneManager.goToInitial();
         DataManager.setGlobalData('isShowMenu', true);
     }

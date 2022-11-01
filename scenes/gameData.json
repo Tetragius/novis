@@ -1,5 +1,9 @@
 [
     "initial",
+
+    "splash_a",
+    "splash_b",
+    
     "game-start",
     "game-js-day",
     "game-js-night",

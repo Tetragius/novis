@@ -73,7 +73,7 @@ GameManager.load(
         '/components/dialog-system.js',
     ]
 )
-    .then(() => GameManager.init())
     .then(() => {
         document.body.querySelector('.loader')?.remove();
-    });
+    })
+    .then(() => GameManager.init());

@@ -1,0 +1,30 @@
+---
+splash_a:
+  # Настройки
+  splash: 1
+  # Элементы
+  template:
+    name: g-scene
+    attrs:
+      id: splash_a
+      conditional: false
+    children:
+    - name: g-layer
+      attrs: {}
+      children:
+      - name: g-image
+        attrs:
+          src: /img/js-day.jpg
+          w: 1024px
+          h: 768px
+        children: []
+  scripts:
+    onIn:
+    - conditional: true
+      steps:
+      - $cmd:fadeIn:1$
+      - $cmd:wait-click$
+    onOut:
+    - conditional: true
+      steps:
+      - $cmd:fadeOut:1$

@@ -16,7 +16,7 @@ export const commands = {
         resolver('kill-this-script');
     },
     'eval': async (code, _, resolver, ...prevStepReturns) => {
-        const result = await(new AsyncFunction('prevStepReturns', code))(prevStepReturns);
+        const result = await (new AsyncFunction('prevStepReturns', code))(prevStepReturns);
         resolver(result);
     },
     'wait': (seconds, pid, resolver, ...prevStepReturns) => {
@@ -26,6 +26,11 @@ export const commands = {
             DataManager.removeEventListener('change', foo);
             resolver(prevStepReturns);
         }, Number(seconds * 1000))
+    },
+    'wait-click': (pid, resolver, ...prevStepReturns) => {
+        document.body.addEventListener('click', () => { 
+            resolver('wait-click');
+        }, { once: true });
     },
     'set-temp-value': (name, value, pid, resolver) => {
         CommandManager.process[pid]['data'] = CommandManager.process[pid]['data'] ?? {};

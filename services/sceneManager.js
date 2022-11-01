@@ -79,6 +79,20 @@ export class Scenes extends EventTarget {
      *
      * @memberof Scenes
      */
+    async playSplashScenes() {
+        const splashScenes = Object.entries(window['$gameScenes'])
+            .filter(([_, { data }]) => !!data.splash)
+            .sort(([_A, { data: A }], [_B, { data: B }]) => A.splash - B.splash);
+        for (const splashScene of splashScenes) {
+            await this.changeScene(splashScene[0]);
+        }
+    }
+
+    /**
+     *
+     *
+     * @memberof Scenes
+     */
     async goToInitial() {
         this.changeScene('initial');
     }
