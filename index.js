@@ -49,6 +49,7 @@ GameManager.load(
     ],
     [
         '/core-components/element.js',
+        '/core-components/interactive.js',
         '/core-components/game.js',
         '/core-components/layer.js',
         '/core-components/image.js',

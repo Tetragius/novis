@@ -1,25 +1,9 @@
-import { CommandManager } from "../services/commandManager.js";
-import { GameElement } from "./element.js";
+import { Interactive } from "./interactive.js";
 
-export class Button extends GameElement {
+export class Button extends Interactive {
 
     constructor() {
         super();
-        this.addEventListener('click', () => Button.staticActions());
-        this.addEventListener('click', this.doAction);
-        this.addEventListener('actioncomplete', () => this.onactioncomplete?.());
-    }
-
-    set action(value) {
-        this.setAttribute('action', value);
-    }
-
-    doAction = async () => {
-        if (this.hasAttribute('action')) {
-            const action = this.getAttribute('action');
-            await CommandManager.runCommands(action.split(','));
-            this.dispatchEvent(new CustomEvent('actioncomplete'));
-        }
     }
 
     setPosition() {
@@ -27,8 +11,6 @@ export class Button extends GameElement {
         this.style.width = this.hasAttribute('w') ? `${this.getAttribute('w')}` : '';
         this.style.height = this.hasAttribute('h') ? `${this.getAttribute('h')}` : '';
     }
-
-    static staticActions = () => { }
 
     _css = `
         :host{

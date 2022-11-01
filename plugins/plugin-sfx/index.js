@@ -63,9 +63,9 @@ export default class AudioPlugin {
 
     postLoad = async () => {
         const Button = customElements.get('g-button');
-        const old = Button.staticActions;
-        Button.staticActions = () => {
-            old();
+        const old = Button.clickActions;
+        Button.clickActions = () => {
+            old?.();
             SFXManager.sound('/sfx/click.wav');
         }
     }
