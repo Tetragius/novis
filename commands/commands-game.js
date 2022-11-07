@@ -7,7 +7,6 @@ const textProcessor = (string = "") => {
         let index = 0;
         while (index < string.length) {
 
-            console.log(string[index])
             if (string[index] === '\x1b') {
                 result.push(document.createElement('span'));
                 index++;

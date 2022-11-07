@@ -89,6 +89,11 @@ export default class InventoryPlugin {
 
     commands = {
         'pg-dialog-play': async (id, pid, resolver) => {
+
+            this.sm.addEventListener('scenechangestart', () => {
+                console.log(1);
+            });
+
             const messages = this.sm.currentScene.dialogs[id];
 
             let oldType = 'dialog';
