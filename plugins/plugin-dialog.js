@@ -57,7 +57,8 @@ export default class InventoryPlugin {
 
     drawButton = () => {
         const button = document.createElement('g-button');
-        button.onclick = () => {
+        button.onclick = (e) => {
+            e.stopPropagation();
             this.autoToggle = !this.autoToggle;
             button.innerHTML = this.autoToggle ? 'Авто диалог ВЫКЛ' : 'Авто диалог ВКЛ';
         };

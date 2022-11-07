@@ -1,5 +1,32 @@
 export const name = 'dialog-history';
 
+// TODO: Временно - клон из файла commands/commands-game.js 
+const textProcessor = (string = "") => {
+    if (string.length) {
+        const result = [document.createElement('span')];
+        let index = 0;
+        while (index < string.length) {
+
+            if (string[index] === '\x1b') {
+                result.push(document.createElement('span'));
+                index++;
+
+                if (string[index] === 'C') {
+                    result[result.length - 1].style.color = `#${string.substring(index + 1, index + 7)}`;
+                    index += 7;
+                }
+
+                continue;
+            }
+
+            result[result.length - 1].innerHTML += string[index];
+            index++;
+        }
+        return result.map(el => el.outerHTML).join('\n');
+    }
+    return '';
+}
+
 const defineComponents = (GameElement, DataManager, CommandManager) => {
     class DialogHistoryWindow extends GameElement {
         constructor() {
@@ -9,8 +36,8 @@ const defineComponents = (GameElement, DataManager, CommandManager) => {
         defineItems() {
             const temp = document.createElement('div');
             Object.entries(DataManager.global.dialogHistory).forEach(([_, item]) => {
-                const div = document.createElement('pre');
-                div.innerHTML = `${item.name}\n${item.message}`;
+                const div = document.createElement('div');
+                div.innerHTML = `${textProcessor(item.name)}\n${textProcessor(item.message)}`;
                 temp.appendChild(div);
             });
             return temp.innerHTML;
@@ -73,7 +100,8 @@ export default class DialogHistoryPlugin {
         this.gm.settingsBlockRef.after(layer);
     }
 
-    toggle = () => {
+    toggle = (e) => {
+        e.stopPropagation();
         if (this.dm.global.sysDialogName) {
             this.gm.dispatchEvent(new CustomEvent('continue'));
             this.dm.setGlobalData('sysDialogName', '');
@@ -85,7 +113,7 @@ export default class DialogHistoryPlugin {
 
     drawButton = () => {
         const button = document.createElement('g-button');
-        button.onclick = () => this.toggle();
+        button.onclick = (e) => this.toggle(e);
         button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
         button.innerHTML = 'История';
 

@@ -72,7 +72,8 @@ export default class InventoryPlugin {
         this.gm.settingsBlockRef.after(layer);
     }
 
-    toggle = () => {
+    toggle = (e) => {
+        e.stopPropagation();
         if (this.dm.global.sysDialogName) {
             this.gm.dispatchEvent(new CustomEvent('continue'));
             this.dm.setGlobalData('sysDialogName', '');
@@ -84,7 +85,7 @@ export default class InventoryPlugin {
 
     drawMenuButton = () => {
         const button = document.createElement('g-button');
-        button.onclick = () => this.toggle();
+        button.onclick = (e) => this.toggle(e);
         button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
         button.innerHTML = 'Инвентарь';
 
