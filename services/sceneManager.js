@@ -63,10 +63,10 @@ export class Scenes extends EventTarget {
      * @memberof Scenes
      */
     async changeScene(sceneName) {
+        this.dispatchEvent(new CustomEvent('scenechangestart'));
         const scene = window["$gameScenes"][sceneName];
         const promise = new Promise(resolve => scene.onmount = resolve);
-        this.dispatchEvent(new CustomEvent('scenechangestart'));
-        await CommandManager.evalScripts(this.currentSceneElem?.data?.scripts?.onOut, true);
+        await CommandManager.evalScripts(this.currentSceneElem?.data?.scripts?.onOut, true);        
         scene.setAttribute('conditional', 'true');
         this.currentSceneElem?.setAttribute('conditional', 'false');
         this.currentSceneElem = scene;

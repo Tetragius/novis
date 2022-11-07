@@ -90,15 +90,25 @@ export default class InventoryPlugin {
     commands = {
         'pg-dialog-play': async (id, pid, resolver) => {
 
-            this.sm.addEventListener('scenechangestart', () => {
-                console.log(1);
-            });
+            this.sm.addEventListener('scenechangestart', async () => {
+                this.cm.killProcess(pid);
+                DIALOGS.menu.element.conditional = false;
+                await DIALOGS.menu.element.isHide;
+                DIALOGS.dialog.element.conditional = false;
+                await DIALOGS.dialog.element.isHide;
+                DIALOGS.titled.element.conditional = false;
+                await DIALOGS.titled.element.isHide;
+                DIALOGS.input.element.conditional = false;
+                await DIALOGS.input.element.isHide;
+
+            }, { once: true });
 
             const messages = this.sm.currentScene.dialogs[id];
 
             let oldType = 'dialog';
 
             for (const message of messages) {
+
                 const { type = 'dialog', conditional = true, duration = this.deafaultDuration, preactions, actions, postactions, title, text, options } = message;
 
                 if (type !== oldType) {
@@ -118,7 +128,15 @@ export default class InventoryPlugin {
                     ].filter(Boolean);
 
                     DIALOGS[type].element.conditional = true;
-                    await this.cm.evalCommandChain([...script], pid);
+
+                    try {
+                        await this.cm.evalCommandChain([...script], pid);
+                    }
+                    catch (error) {
+                        DIALOGS.menu.element.conditional = false;
+                        await DIALOGS.menu.element.isHide;
+                        break;
+                    }
 
                     if (options?.length) {
                         DIALOGS.menu.element.innerHTML = '';

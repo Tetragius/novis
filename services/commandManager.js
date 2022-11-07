@@ -133,14 +133,16 @@ export class Interpretator extends EventTarget {
         return result;
     }
 
-    async resolveScriptConditional(script) {
-        if (await this.execCommandString(script.conditional)) {
+    async resolveScriptConditional(script, pid) {
+        // console.log('resolveScriptConditional: ', script.conditional);
+        if (await this.execCommandString(script.conditional, pid)) {
+            // console.log('resolveScriptConditional complete: ', true);
             return true;
         }
         if (script.awaitConditional) {
             const result = await new Promise(resolve => {
                 const foo = async () => {
-                    if (await this.execCommandString(script.conditional)) {
+                    if (await this.execCommandString(script.conditional, pid)) {
                         DataManager.removeEventListener('change', foo);
                         resolve(true);
                     }
@@ -152,8 +154,9 @@ export class Interpretator extends EventTarget {
         return false;
     }
 
-    async loop(script) {
-        // console.log('loop: ', script)        
+    async loop(script, poolId) {
+        // console.log('loop: ', script)    
+        if (poolId && !this.#process[poolId]) return Promise.resolve();
         const pid = this.newProcess(script);
 
         let count = Number(script.loop ?? 1);
@@ -168,8 +171,13 @@ export class Interpretator extends EventTarget {
             let resolver;
             const promise = new Promise(resolve => resolver = resolve);
             setTimeout(async () => {
-                if (await this.resolveScriptConditional(script)) {
-                    await this.evalCommandChain([...script.steps], pid);
+                if (await this.resolveScriptConditional(script, pid)) {
+                    try {
+                        await this.evalCommandChain([...script.steps], pid);
+                    }
+                    catch (error) {
+                        resolver();
+                    }
                 }
                 resolver();
             });
@@ -182,8 +190,8 @@ export class Interpretator extends EventTarget {
     }
 
     async evalCommandChain(chain, pid, prevStepReturns) {
-        // console.log('eval command chain: ', chain, pid);
-        if (pid && !this.#process[pid]) return Promise.resolve();
+        // console.log('eval command chain: ', chain, pid, !this.#process[pid]);
+        if (pid && !this.#process[pid]) return Promise.reject();
         const step = chain.shift();
         if (step) {
             let result = null;
@@ -208,38 +216,41 @@ export class Interpretator extends EventTarget {
         return Promise.all(chains.map(chain => this.evalCommandChain(safityArrayFrom(chain), pid, prevStepReturns)));
     }
 
-    async evalScriptsChain(chain) {
+    // TODO: Кажется это лишнее
+    async evalScriptsChain(chain, poolId) {
         // console.log('eval scripts chain: ', chain);
         const step = chain.shift();
         if (step) {
-            await this.loop(step);
-            return this.evalScriptsChain(chain);
+            await this.loop(step, poolId);
+            return this.evalScriptsChain(chain, poolId);
         }
     }
 
-    async evalScriptsParallel(chains) {
+    // TODO: Кажется это лишнее
+    async evalScriptsParallel(chains, poolId) {
         // console.log('eval scripts parallel: ', chains);
         await Promise.all(chains.map(async (chain) => {
-            await this.loop(chain);
+            await this.loop(chain, poolId);
         }));
     }
 
-    async evalScripts(scripts = [], kill = false, parentId) {
+    async evalScripts(scripts = [], kill = false, parentId = this.newProcess(scripts)) {
+
+        if (parentId) {
+            scripts.forEach(script => script['parentId'] = parentId);
+        }
+
+        const series = scripts.filter(script => !script.parallel);
+        const parallel = scripts.filter(script => script.parallel);
+        this.evalScriptsParallel(parallel, parentId);
+        await this.evalScriptsChain(series, parentId);
+
         // console.log('eval scripts', scripts, kill);
         if (kill) {
             for (let proc in this.#process) {
                 this.killProcess(proc);
             }
         }
-
-        if (parentId) {
-            scripts.forEach(script => script['parentId'] = parentId)
-        }
-
-        const series = scripts.filter(script => !script.parallel);
-        const parallel = scripts.filter(script => script.parallel);
-        this.evalScriptsParallel(parallel);
-        await this.evalScriptsChain(series);
     }
 
     async evalSceneScriptByName(scene, name) {
