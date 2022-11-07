@@ -48,7 +48,24 @@ export default class InventoryPlugin {
         this.init();
     }
 
-    init = () => { }
+    autoToggle = false;
+    deafaultDuration = 2;
+
+    init = () => {
+        this.drawButton();
+    }
+
+    drawButton = () => {
+        const button = document.createElement('g-button');
+        button.onclick = () => {
+            this.autoToggle = !this.autoToggle;
+            button.innerHTML = this.autoToggle ? 'Авто диалог ВЫКЛ' : 'Авто диалог ВКЛ';
+        };
+        button.setAttribute('conditional', '$cmd:get-global-data:isStarted$');
+        button.innerHTML = this.autoToggle ? 'Авто диалог ВЫКЛ' : 'Авто диалог ВКЛ';
+
+        this.gm.bottomGroupRef.append(button);
+    };
 
     postLoad = async () => {
         const dialogsEl = Object.entries(DIALOGS).map(([key, data]) => {
@@ -77,7 +94,7 @@ export default class InventoryPlugin {
             let oldType = 'dialog';
 
             for (const message of messages) {
-                const { type = 'dialog', conditional = true, duration = 1, preactions, actions, postactions, title, text, options } = message;
+                const { type = 'dialog', conditional = true, duration = this.deafaultDuration, preactions, actions, postactions, title, text, options } = message;
 
                 if (type !== oldType) {
                     DIALOGS[oldType].element.conditional = false;
@@ -91,7 +108,7 @@ export default class InventoryPlugin {
                             ...(actions ?? []),
                             constructCommand(type, title, text),
                         ],
-                        type === 'input' ? false : `$cmd:wait:${duration}$`,
+                        type === 'input' ? false : `$cmd:wait-click:${this.autoToggle ? 0 : duration}$`,
                         ...(postactions ?? []),
                     ].filter(Boolean);
 

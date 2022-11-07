@@ -27,9 +27,22 @@ export const commands = {
             resolver(prevStepReturns);
         }, Number(seconds * 1000))
     },
-    'wait-click': (pid, resolver, ...prevStepReturns) => {
-        document.body.addEventListener('click', () => { 
-            resolver('wait-click');
+    'wait-click': (seconds, pid, resolver, ...prevStepReturns) => {
+        const foo = () => DataManager.global.isSkipMode && resolver(prevStepReturns);
+        DataManager.addEventListener('change', foo);
+        let timer;
+        if (Number(seconds)) {
+            timer = setTimeout(() => {
+                DataManager.removeEventListener('change', foo);
+                resolver(prevStepReturns);
+            }, Number(seconds * 1000))
+        }
+        document.body.addEventListener('click', () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+            DataManager.removeEventListener('change', foo);
+            resolver(prevStepReturns);
         }, { once: true });
     },
     'set-temp-value': (name, value, pid, resolver) => {

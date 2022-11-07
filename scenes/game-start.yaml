@@ -26,7 +26,7 @@ game-start:
   # Диалоги   
   dialogs:
     first-meet:
-    - text: Мой первый день на новом месте!
+    - text: "\x1bCff0000Мой первый \x1bC00ff00де\x1bC0000ffнь на новом месте!"
     - text: Как же я рад, надеюсь, что найду тут новых друзей!
     - text: О вот кто-то идет!
 
@@ -35,12 +35,12 @@ game-start:
       - $cmd:pg-actor-show:nata:soft:0:48px$
       - $cmd:play-animation-on:nata:lightSpeedInLeft:1:1:nata-animation$
       - $cmd:wait:1$
-      title: '???'
+      title: "\x1bCff0000???"
       text: Привет, Я Наташа - фронтендер, рада познакомиться!
       duration: 2
 
     - type: titled
-      title: Наташа
+      title: "\x1bCff0000Наташа"
       text: Кстати, как тебя зовут?
       duration: 2
 

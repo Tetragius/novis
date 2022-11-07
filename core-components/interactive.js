@@ -16,6 +16,13 @@ export class Interactive extends GameElement {
         this.setAttribute('action', value);
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        if (this.hasAttribute('action')) {
+            this.style.cursor = 'pointer';
+        }
+    }
+
     doAction = async (e) => {
         if (this.hasAttribute('action')) {
             const action = this.getAttribute('action');

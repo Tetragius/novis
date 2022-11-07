@@ -1,6 +1,32 @@
 import { GameManager } from "../services/gameManager.js";
-import { CommandManager } from "../services/commandManager.js";
 import { SceneManager } from '../services/sceneManager.js';
+
+const textProcessor = (string = "") => {
+    if (string.length) {
+        const result = [document.createElement('span')];
+        let index = 0;
+        while (index < string.length) {
+
+            console.log(string[index])
+            if (string[index] === '\x1b') {
+                result.push(document.createElement('span'));
+                index++;
+
+                if (string[index] === 'C') {
+                    result[result.length - 1].style.color = `#${string.substring(index + 1, index + 7)}`;
+                    index += 7;
+                }
+
+                continue;
+            }
+
+            result[result.length - 1].innerHTML += string[index];
+            index++;
+        }
+        return result.map(el => el.outerHTML).join('\n');
+    }
+    return '';
+}
 
 export const commands = {
     // game
@@ -20,18 +46,18 @@ export const commands = {
     },
     'set-dialog': (id, message, pid, resolver) => {
         const dialog = document.querySelector(`g-dialog[id=${id}]`);
-        dialog.innerHTML = message;
+        dialog.innerHTML = textProcessor(message);
         resolver('set-dialog');
     },
     'set-dialog-titled': (id, title, message, pid, resolver) => {
         const dialog = document.querySelector(`g-dialog-titled[id=${id}]`);
-        dialog.shadowRoot.querySelector('[title]').innerHTML = title;
-        dialog.shadowRoot.querySelector('[message]').innerHTML = message;
+        dialog.shadowRoot.querySelector('[title]').innerHTML = textProcessor(title);
+        dialog.shadowRoot.querySelector('[message]').innerHTML = textProcessor(message);
         resolver('set-dialog-titled');
     },
     'get-dialog-input': (id, title, _, resolver) => {
         const dialog = document.querySelector(`g-dialog-input[id=${id}]`);
-        dialog.shadowRoot.querySelector('[title]').innerHTML = title;
+        dialog.shadowRoot.querySelector('[title]').innerHTML = textProcessor(title);
         dialog.addEventListener('submit', async ({ detail }) => resolver(String(detail)), { once: true })
     },
     'set-title': (id, text, pid, resolver) => {

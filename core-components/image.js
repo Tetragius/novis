@@ -1,6 +1,6 @@
-import { GameElement } from "./element.js";
+import { Interactive } from "./interactive.js";
 
-export class Image extends GameElement {
+export class Image extends Interactive {
 
     constructor() {
         super();

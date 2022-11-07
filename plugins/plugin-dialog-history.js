@@ -61,7 +61,7 @@ export default class DialogHistoryPlugin {
     init = () => {
         document.body.addEventListener('keydown', this.keyDownHandler);
         this.draw();
-        this.drawMenuButton();
+        this.drawButton();
     }
 
     draw = () => {
@@ -83,7 +83,7 @@ export default class DialogHistoryPlugin {
         this.dm.setGlobalData('sysDialogName', 'dialog-history');
     }
 
-    drawMenuButton = () => {
+    drawButton = () => {
         const button = document.createElement('g-button');
         button.onclick = () => this.toggle();
         button.setAttribute('conditional', '$cmd:get-global-data:isStarted$')
