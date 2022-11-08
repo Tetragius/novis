@@ -46,12 +46,14 @@ export class Interpretator extends EventTarget {
         const id = pid ?? chain.name ?? String(Math.random()).split('.')[1];
         chain['pid'] = id;
         this.#process[id] = chain;
+        console.group(`%c${id} start`, 'color: green');
         return id;
     }
 
     killProcess(id) {
-        console.groupEnd();
         if (this.#process[id]) {
+            console.log(`%c${id} end`, 'color: red');
+            console.groupEnd();
             delete this.#process[id].pid;
             delete this.#process[id];
         }
@@ -93,7 +95,7 @@ export class Interpretator extends EventTarget {
     async execCommandString(cmdString, pid) {
         try {
             const code = String(cmdString).replace(/(\$cmd:(.*?)\$)/gm, '(await this.runCommand("$1", pid))');
-            const result = new AsyncFunction('pid', `return ${code}`).call(this, pid);
+            const result = await new AsyncFunction('pid', `return ${code}`).call(this, pid);
             return result;
         }
         catch (error) {
@@ -125,10 +127,10 @@ export class Interpretator extends EventTarget {
     }
 
     async runCommands(commands, pid, attrs) {
-        this.newProcess(command, pid);
-        await Promise.all(commands.map(command => this.runCommand(command, pid, attrs)));
+        this.newProcess(commands, pid);
+        const result = await Promise.all(commands.map(command => this.runCommand(command, pid, attrs)));
         this.killProcess(pid);
-        return;
+        return result;
     }
 
     async checkConditional(conditional, pid) {
@@ -169,7 +171,6 @@ export class Interpretator extends EventTarget {
             count = await this.checkConditional(script.loop, pid) ? Infinity : 1;
         }
 
-        console.group(`%c${pid}`, 'color: green');
         while (count && this.#process[pid]) {
             let resolver;
             const promise = new Promise(resolve => resolver = resolve);
@@ -177,8 +178,10 @@ export class Interpretator extends EventTarget {
                 if (await this.resolveScriptConditional(script, pid)) {
                     try {
                         await this.evalCommandChain([...script.steps], pid);
+                        resolver();
                     }
                     catch (error) {
+                        console.log(`process terminated: ${error}`);
                         resolver();
                     }
                 }
@@ -194,22 +197,32 @@ export class Interpretator extends EventTarget {
 
     async evalCommandChain(chain, pid, prevStepReturns) {
         // console.log('eval command chain: ', chain, pid, !this.#process[pid]);
-        if (pid && !this.#process[pid]) return Promise.reject();
+        if (pid && !this.#process[pid]) return Promise.reject(pid);
         const step = chain.shift();
         if (step) {
             let result = null;
+
             await this.pause();
+
             if (typeof step === 'string') {
                 result = await CommandManager.runCommand(step, pid, prevStepReturns);
                 // console.log('command result: ', result);
             } else if (Array.isArray(step)) {
-                console.group('%cparallel', 'color: blue');
+                console.group('%cparallel', 'color: yellow');
                 result = await this.evalCommandParallel([...step], pid, prevStepReturns);
                 console.groupEnd();
             } else if (typeof step === 'object') {
                 await this.evalScripts([step], false, pid);
             }
-            return this.evalCommandChain(chain, pid, result);
+
+            try {
+                return this.evalCommandChain(chain, pid, result);
+            }
+            catch (error) {
+                console.log(`process terminated: ${error} go next`);
+                return this.evalCommandChain(chain, pid, result);
+            }
+
         }
         return prevStepReturns;
     }
@@ -238,7 +251,7 @@ export class Interpretator extends EventTarget {
     }
 
     async evalScripts(scripts = [], kill = false, parentId = this.newProcess(scripts)) {
-
+        // console.log('eval scripts', scripts, kill);
         if (parentId) {
             scripts.forEach(script => script['parentId'] = parentId);
         }
@@ -247,14 +260,14 @@ export class Interpretator extends EventTarget {
         const parallel = scripts.filter(script => script.parallel);
         this.evalScriptsParallel(parallel, parentId);
         await this.evalScriptsChain(series, parentId);
-        this.killProcess(parentId);
 
-        // console.log('eval scripts', scripts, kill);
         if (kill) {
             for (let proc in this.#process) {
                 this.killProcess(proc);
             }
         }
+
+        return;
     }
 
     async evalSceneScriptByName(scene, name) {

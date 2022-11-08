@@ -125,6 +125,7 @@ game-js-day:
       - $cmd:set-scene:game-start$
     mini-game:
     - conditional: 'true'
+      name: mini-game
       steps:
       - $cmd:pg-dialog-play:game$ 
 
@@ -133,6 +134,7 @@ game-js-day:
 
       - $cmd:set-scene-data:this:isStartClickGame:true$
       - conditional: $cmd:get-scene-data:this:count$ === 3
+        name: mini-game-sub
         awaitConditional: true # Скрипт ждет когда условие станет true
         steps:
         - $cmd:set-scene-data:this:isStartClickGame:false$
