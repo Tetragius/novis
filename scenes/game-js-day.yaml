@@ -27,7 +27,7 @@ game-js-day:
         children:
         - name: g-image
           attrs:
-            onclick: $commandManager.runCommand('$cmd:increment-scene-data:this:count:1$')
+            action: $cmd:increment-scene-data:this:count:1$
             src: /img/target1.png
             w: 150px
             h: 150px
