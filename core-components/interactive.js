@@ -8,7 +8,7 @@ export class Interactive extends GameElement {
         this.addEventListener('click', () => this.constructor.clickActions?.());
         this.addEventListener('mouseover', () => this.constructor.hoverActions?.());
 
-        this.addEventListener('onmousedown', this.doAction);
+        this.addEventListener('click', this.doAction);
         this.addEventListener('actioncomplete', () => this.onactioncomplete?.());
     }
 

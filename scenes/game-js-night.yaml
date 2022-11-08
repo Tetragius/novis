@@ -22,7 +22,7 @@ game-js-night:
         children:
         - name: g-image
           attrs:
-            onclick: $commandManager.runCommand('$cmd:run-script:about-box$')
+            action: $cmd:run-script:about-box$
             src: /img/box.png
             x: 714px
             y: 57px
