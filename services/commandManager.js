@@ -42,8 +42,8 @@ export class Interpretator extends EventTarget {
         }, 500);
     }
 
-    newProcess(chain) {
-        const id = chain.name ?? String(Math.random()).split('.')[1];
+    newProcess(chain, pid) {
+        const id = pid ?? chain.name ?? String(Math.random()).split('.')[1];
         chain['pid'] = id;
         this.#process[id] = chain;
         return id;
@@ -125,7 +125,10 @@ export class Interpretator extends EventTarget {
     }
 
     async runCommands(commands, pid, attrs) {
-        return Promise.all(commands.map(command => this.runCommand(command, pid, attrs)));
+        this.newProcess(command, pid);
+        await Promise.all(commands.map(command => this.runCommand(command, pid, attrs)));
+        this.killProcess(pid);
+        return;
     }
 
     async checkConditional(conditional, pid) {
@@ -244,6 +247,7 @@ export class Interpretator extends EventTarget {
         const parallel = scripts.filter(script => script.parallel);
         this.evalScriptsParallel(parallel, parentId);
         await this.evalScriptsChain(series, parentId);
+        this.killProcess(parentId);
 
         // console.log('eval scripts', scripts, kill);
         if (kill) {

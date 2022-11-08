@@ -24,11 +24,11 @@ export class Interactive extends GameElement {
     }
 
     doAction = async (e) => {
-        if (this.hasAttribute('action')) {
+        const action = this.getAttribute('action');
+        if (action && !CommandManager.process[action]) {
             e.stopPropagation();
             e.stopImmediatePropagation();
-            const action = this.getAttribute('action');
-            await CommandManager.runCommands(action.split(','), e?.target?.value);
+            await CommandManager.runCommands(action.split(','), action, e?.target?.value);
             this.dispatchEvent(new CustomEvent('actioncomplete'));
         }
     }
