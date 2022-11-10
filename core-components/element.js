@@ -1,5 +1,6 @@
 import { DataManager } from '../services/dataManager.js';
 import { CommandManager } from '../services/commandManager.js';
+import { SceneManager } from '../services/sceneManager.js';
 
 export class GameElement extends HTMLElement {
 
@@ -12,6 +13,7 @@ export class GameElement extends HTMLElement {
         !noShadow && this.attachShadow({ mode: 'open' });
 
         DataManager.addEventListener('change', this.checkConditional);
+        SceneManager.addEventListener('scenechangeend', this.checkConditional);
 
         this.addEventListener('unmount', () => this.onunmount?.());
         this.addEventListener('mount', () => this.onmount?.());

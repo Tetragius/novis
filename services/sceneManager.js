@@ -63,9 +63,17 @@ export class Scenes extends EventTarget {
      * @memberof Scenes
      */
     async changeScene(sceneName) {
+
+        if(this.sceneChangeInProgress){
+            return;
+        }
+
         this.dispatchEvent(new CustomEvent('scenechangestart'));
         const scene = window["$gameScenes"][sceneName];
         const promise = new Promise(resolve => scene.onmount = resolve);
+        
+        this.sceneChangeInProgress = true;
+        
         await CommandManager.evalScripts(this.currentSceneElem?.data?.scripts?.onOut, true);        
         scene.setAttribute('conditional', 'true');
         this.currentSceneElem?.setAttribute('conditional', 'false');
@@ -74,7 +82,11 @@ export class Scenes extends EventTarget {
         this.currentScene = this.currentSceneElem?.data;
         await promise;
         await CommandManager.evalScripts(scene.data?.scripts?.onIn);
+
+        this.sceneChangeInProgress = false;
+        
         this.dispatchEvent(new CustomEvent('scenechangeend'));
+        
     }
     /**
      *
